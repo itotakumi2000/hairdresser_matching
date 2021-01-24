@@ -7,11 +7,15 @@ app.set("view engine", "ejs")
 app.use(express.static("public"))
 
 app.get('/', (req, res) => {
-    res.render('./index.ejs')
-    connection.query('SELECT * FROM user;', function (err, rows, fields) {
-        if (err) { console.log('err: ' + err); } 
-        console.log(rows)
-    })
+    res.render('./common/index.ejs')
+})
+
+app.get('/login', (req, res) => {
+    res.render('./common/index.ejs')
+})
+
+app.get('/signup', (req, res) => {
+    res.render('./common/index.ejs')
 })
 
 app.listen(3000, () => {

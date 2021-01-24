@@ -1,0 +1,83 @@
+header {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  background-color: rgb(255, 0, 0);
+  padding: 25px 30px;
+
+  h1 {
+    margin: 0;
+    color: white;
+  }
+
+  nav {
+    display: flex;
+
+    ul {
+      margin: 0;
+      display: flex;
+      align-items: center;
+      list-style: none;
+
+      li {
+        color: white;
+        padding: 0 10px;
+
+        a {
+          color: white;
+        }
+
+        a:hover {
+          color: white;
+        }
+      }
+    }
+  }
+}
+
+main {
+  .top-img {
+    position: relative;
+
+    img {
+      width: 100%;
+    }
+
+    p {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, -150%);
+      margin: 0;
+      padding: 0;
+      color: white;
+      opacity: 0.9;
+      font-size: 45px;
+    }
+
+    button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      -ms-transform: translate(-50%, -50%);
+      -webkit-transform: translate(-50%, -50%);
+      transform: translate(-50%, 0%);
+      margin: 0;
+      padding: 15px 60px;
+      font-size: 20px;
+      background-color: rgb(255, 0, 0);
+      color: white;
+    }
+  }
+
+  .concept {
+  }
+
+  .feature {
+  }
+
+  .how-to-use {
+  }
+}

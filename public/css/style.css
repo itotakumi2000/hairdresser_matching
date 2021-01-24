@@ -1,0 +1,81 @@
+header {
+  margin: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+          justify-content: space-between;
+  background-color: red;
+  padding: 25px 30px;
+}
+
+header h1 {
+  margin: 0;
+  color: white;
+}
+
+header nav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+header nav ul {
+  margin: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  list-style: none;
+}
+
+header nav ul li {
+  color: white;
+  padding: 0 10px;
+}
+
+header nav ul li a {
+  color: white;
+}
+
+header nav ul li a:hover {
+  color: white;
+}
+
+main .top-img {
+  position: relative;
+}
+
+main .top-img img {
+  width: 100%;
+}
+
+main .top-img p {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, -150%);
+  margin: 0;
+  padding: 0;
+  color: white;
+  opacity: 0.9;
+  font-size: 45px;
+}
+
+main .top-img button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+  transform: translate(-50%, 0%);
+  margin: 0;
+  padding: 15px 60px;
+  font-size: 20px;
+  background-color: red;
+  color: white;
+}
+/*# sourceMappingURL=style.css.map */
