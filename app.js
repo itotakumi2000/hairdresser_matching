@@ -23,7 +23,7 @@ app.get('/user-signup', (req, res) => {
     res.render('./user/signup.ejs')
 })
 
-app.post('/user-post', (req, res) => {
+app.post('/user-login', (req, res) => {
     let data = '';
 
     req.on('data', function(chunk) {data += chunk})
@@ -33,17 +33,51 @@ app.post('/user-post', (req, res) => {
         data = data.split('&');
 
         let request_contents = [];
+
         data.forEach((value) => {
             let search_equal = value.indexOf("=")
             let request_content = value.substr(search_equal + 1)
             request_contents.push(request_content)
         })
+
+        connection.query('SELECT * FROM user_info WHERE mail =\'' + request_contents[0] +'\';', function (err, rows, fields) {
+            if (err) { console.log('err: ' + err)};
+
+            if(bcrypt.compareSync(request_contents[1], rows[0].password)){
+                //ログイン成功時
+
+            }else {
+                //ログイン失敗時
+
+            }
+            
+        });
+
+    })
+})
+
+app.post('/user-signup', (req, res) => {
+    let data = '';
+
+    req.on('data', function(chunk) {data += chunk})
+        .on('end', function() {
+    
+        data = decodeURIComponent(data.replace(/\+/g, "%20"));
+        data = data.split('&');
+
+        let request_contents = [];
+
+        data.forEach((value) => {
+            let search_equal = value.indexOf("=")
+            let request_content = value.substr(search_equal + 1)
+            request_contents.push(request_content)
+        })
+
         let password = request_contents[8];
-        console.log('password：' + password)
         const saltRounds = 10;
         let hashed_password = bcrypt.hashSync(password, saltRounds);
-        console.log('hashed_password：' + hashed_password)
-        connection.query('insert into user_info(lastname, firstname, gender, postalcode, address, tel, mail, password) values (\' ' + request_contents[0] + '\', \' ' + request_contents[1] + '\', \''+ request_contents[2] + '\', \' ' + request_contents[3] + request_contents[4] + '\', \' ' + request_contents[5] + '\', \' ' + request_contents[6] + '\', \' ' + request_contents[7] + '\', \' ' + hashed_password + '\');', function (err, rows) {
+
+        connection.query('insert into user_info(lastname, firstname, gender, postalcode, address, tel, mail, password) values (\'' + request_contents[0] + '\', \'' + request_contents[1] + '\', \''+ request_contents[2] + '\', \'' + request_contents[3] + request_contents[4] + '\', \'' + request_contents[5] + '\', \'' + request_contents[6] + '\', \'' + request_contents[7] + '\', \'' + hashed_password + '\');', function (err, rows) {
             if (err) { console.log('err: ' + err); } 
         });
     })

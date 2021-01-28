@@ -1,1 +1,36 @@
-/* No CSS *//*# sourceMappingURL=login.css.map */
+.login {
+  width: 50%;
+  margin: 0 auto;
+  padding: 100px 0;
+}
+
+.login p {
+  margin: 0;
+}
+
+.login input {
+  display: block;
+}
+
+.login form div {
+  padding: 10px 0;
+}
+
+.login form .email-component input {
+  width: 250px;
+  height: 40px;
+}
+
+.login form .password-component input {
+  width: 250px;
+  height: 40px;
+}
+
+.login form button {
+  width: 80px;
+  height: 40px;
+  background-color: #225af3;
+  color: white;
+  margin-top: 25px;
+}
+/*# sourceMappingURL=login.css.map */
