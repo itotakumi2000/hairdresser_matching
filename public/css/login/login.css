@@ -12,6 +12,10 @@
   display: block;
 }
 
+.login span {
+  color: red;
+}
+
 .login form div {
   padding: 10px 0;
 }
@@ -21,9 +25,21 @@
   height: 40px;
 }
 
+.login form .email-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 .login form .password-component input {
   width: 250px;
   height: 40px;
+}
+
+.login form .password-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .login form button {

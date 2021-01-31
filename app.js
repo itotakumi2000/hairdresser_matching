@@ -43,13 +43,19 @@ app.post('/user-login', (req, res) => {
     connection.query('SELECT * FROM user_info WHERE mail =\'' + request_contents[0] +'\';', function (err, rows, fields) {
       if (err) { console.log('err: ' + err)};
 
-      if(bcrypt.compareSync(request_contents[1], rows[0].password)){
-        //ログイン成功時
-
+      if(rows[0] !== undefined){
+        if(bcrypt.compareSync(request_contents[1], rows[0].password)){
+          //ログイン成功時
+          res.render('./user/how-to-use.ejs')
+        }else {
+          //ログイン失敗時（パスワードが間違っているもの）
+          res.render('./user/login.ejs')
+        }
       }else {
-        //ログイン失敗時
-
+        //ログイン失敗時（メールが未登録のもの）
+        res.render('./user/login.ejs')
       }
+
     });
   })
 })

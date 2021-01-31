@@ -4,12 +4,6 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-      crossorigin="anonymous"
-    />
     <link rel="stylesheet" href="css/normalize.css" />
     <link rel="stylesheet" href="css/signup/signup.css" />
     <link
@@ -18,21 +12,42 @@
       rel="stylesheet"
       media="screen,projection"
     />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.0.min.js"></script>
     <title>Document</title>
   </head>
   <body>
     <%- include ('../common/header') %>
     <div class="signup">
       <h2>新規登録</h2>
-      <form action="user-signup" method="POST" id="form-click">
+      <form action="user-signup" method="POST" id="form-click" novalidate>
         <div class="name">
           <div class="lastname-component">
-            <p>名字</p>
-            <input type="text" name="lastname" class="lastname" required />
+            <div class="component">
+              <p>名字</p>
+              <span class="error_required span-red"></span>
+            </div>
+            <input
+              type="text"
+              name="lastname"
+              class="lastname required"
+              id="lastname"
+            />
+            <span class="error_lastname span-red"></span>
           </div>
           <div class="firstname-component">
-            <p>名前</p>
-            <input type="text" name="firstname" class="firstname" required />
+            <div class="component">
+              <p>名前</p>
+              <span class="error_required span-red"></span>
+            </div>
+            <input
+              type="text"
+              name="firstname"
+              class="firstname required"
+              id="firstname"
+            />
+            <span class="error_firstname span-red"></span>
           </div>
         </div>
         <div class="gender">
@@ -64,15 +79,18 @@
           </div>
         </div>
         <div class="postalcode">
-          <p>郵便番号</p>
+          <div class="component">
+            <p>郵便番号</p>
+            <span class="error_required span-red"></span>
+          </div>
           <div class="postalcode-component">
             <input
               type="text"
               name="zip21"
               size="4"
               maxlength="3"
-              class="pre-postalcode"
-              required
+              class="pre-postalcode required-postalcode"
+              id="pre-postalcode"
             />
             <p>ー</p>
             <input
@@ -81,32 +99,73 @@
               size="5"
               maxlength="4"
               onKeyUp="AjaxZip3.zip2addr('zip21','zip22','addr21','addr21');"
-              class="post-postalcode"
-              required
+              class="post-postalcode required-postalcode"
+              id="post-postalcode"
             />
           </div>
+          <span class="error_postalcode span-red"></span>
         </div>
         <div class="address-component">
-          <p>住所</p>
-          <input type="text" name="addr21" size="40" class="address" />
+          <div class="component">
+            <p>住所</p>
+            <span class="error_required span-red"></span>
+          </div>
+          <input
+            type="text"
+            name="addr21"
+            size="40"
+            class="address required"
+            id="address"
+          />
         </div>
         <div class="telephone-component">
-          <p>電話番号</p>
-          <input type="tel" name="tel" class="telephone" />
+          <div class="component">
+            <p>電話番号</p>
+            <span class="error_required span-red"></span>
+          </div>
+          <input
+            type="tel"
+            name="tel"
+            class="telephone required"
+            id="telephone"
+          />
+          <span class="error_telephone span-red"></span>
         </div>
         <div class="email-component">
-          <p>メールアドレス</p>
-          <input type="email" name="email" class="email" />
+          <div class="component">
+            <p>メールアドレス</p>
+            <span class="error_required span-red"></span>
+          </div>
+          <input type="email" name="email" class="email required" id="email" />
+          <span class="error_email span-red"></span>
         </div>
         <div class="password-component">
-          <p>パスワード</p>
-          <input type="password" name="password" class="password" />
+          <div class="component">
+            <p>パスワード</p>
+            <span class="error_required span-red"></span>
+          </div>
+          <input
+            type="password"
+            name="password"
+            class="password required"
+            id="password"
+          />
+          <span class="error_password span-red"></span>
         </div>
         <div class="conf-password-component">
-          <p>パスワード（確認用）</p>
-          <input type="password" name="conf-password" class="conf-password" />
+          <div class="component">
+            <p>パスワード（確認用）</p>
+            <span class="error_required span-red"></span>
+          </div>
+          <input
+            type="password"
+            name="conf-password"
+            class="conf-password required"
+            id="conf-password"
+          />
+          <span class="error_conf_password span-red"></span>
         </div>
-        <button type="submit">送信</button>
+        <button type="submit" id="submit-input">送信</button>
       </form>
     </div>
     <%- include ('../common/footer') %>
@@ -115,5 +174,6 @@
       charset="UTF-8"
     ></script>
     <script src="js/materialize.js"></script>
+    <script src="js/signup-validation.js"></script>
   </body>
 </html>
