@@ -21,6 +21,7 @@
     <%- include ('../common/header') %>
     <div class="login">
       <h2>ログイン</h2>
+      <p class="error_msg"><%= error_msg %></p>
       <form action="user-login" method="POST" id="form-click" novalidate>
         <div class="email-component">
           <div class="component">

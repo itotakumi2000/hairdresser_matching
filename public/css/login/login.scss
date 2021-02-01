@@ -5,6 +5,19 @@ $button-color: rgb(34, 90, 243);
   margin: 0 auto;
   padding: 100px 0;
 
+  .error_msg {
+    height: 50px;
+    line-height: 50px;
+    padding: 0 30px;
+    display: inline-block;
+    border: solid red 2px;
+  }
+
+  .error_msg:empty {
+    height: 0;
+    border: none;
+  }
+
   p {
     margin: 0;
   }

@@ -118,6 +118,12 @@ $(function(){
         $(this).addClass("errored");
       }
     });
+    $(".required-postalcode").each(function(){
+      if($(this).val() == ""){
+        $(this).parent().siblings('div.component').children('span.error_required').text("※入力必須項目です");
+        $(this).addClass("errored");
+      }
+    });
     if($(".errored").length){
       return false;
     }

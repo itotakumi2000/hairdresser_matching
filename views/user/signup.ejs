@@ -21,6 +21,13 @@
     <%- include ('../common/header') %>
     <div class="signup">
       <h2>新規登録</h2>
+      <p class="empty_error_msg"><%= error_msg.empty_error_msg %></p><br></br>
+      <% for (let inappropriate_error_msg in
+      error_msg.inappropriate_error_msgs){ %>
+      <p class="inappropriate_error_msg">
+        <%= error_msg.inappropriate_error_msgs[inappropriate_error_msg].msg %>
+      </p><br></br>
+      <% } %>
       <form action="user-signup" method="POST" id="form-click" novalidate>
         <div class="name">
           <div class="lastname-component">

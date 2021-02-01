@@ -4,6 +4,19 @@
   padding: 100px 0;
 }
 
+.login .error_msg {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 30px;
+  display: inline-block;
+  border: solid red 2px;
+}
+
+.login .error_msg:empty {
+  height: 0;
+  border: none;
+}
+
 .login p {
   margin: 0;
 }
