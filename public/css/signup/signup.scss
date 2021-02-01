@@ -5,12 +5,40 @@ $button-color: rgb(34, 90, 243);
   margin: 0 auto;
   padding: 100px 0;
 
+  .empty_error_msg {
+    height: 50px;
+    line-height: 50px;
+    padding: 0 30px;
+    display: inline-block;
+    border: solid red 2px;
+  }
+
+  .empty_error_msg:empty {
+    display: none;
+  }
+
+  .inappropriate_error_msg {
+    height: 50px;
+    line-height: 50px;
+    padding: 0 30px;
+    display: inline-block;
+    border: solid red 2px;
+  }
+
+  .inappropriate_error_msg:empty {
+    display: none;
+  }
+
   p {
     margin: 0;
   }
 
   input {
     display: block;
+  }
+
+  span.span-red {
+    color: red;
   }
 
   form {
@@ -23,6 +51,16 @@ $button-color: rgb(34, 90, 243);
 
       .lastname-component {
         margin-right: 30px;
+
+        .component {
+          display: flex;
+        }
+      }
+
+      .firstname-component {
+        .component {
+          display: flex;
+        }
       }
 
       p {
@@ -46,6 +84,10 @@ $button-color: rgb(34, 90, 243);
     }
 
     .postalcode {
+      .component {
+        display: flex;
+      }
+
       .postalcode-component {
         display: flex;
         padding: 0;
@@ -62,6 +104,9 @@ $button-color: rgb(34, 90, 243);
     }
 
     .address-component {
+      .component {
+        display: flex;
+      }
       input {
         width: 250px;
         height: 40px;
@@ -69,6 +114,9 @@ $button-color: rgb(34, 90, 243);
     }
 
     .telephone-component {
+      .component {
+        display: flex;
+      }
       input {
         width: 250px;
         height: 40px;
@@ -76,6 +124,10 @@ $button-color: rgb(34, 90, 243);
     }
 
     .email-component {
+      .component {
+        display: flex;
+      }
+
       input {
         width: 250px;
         height: 40px;
@@ -83,6 +135,10 @@ $button-color: rgb(34, 90, 243);
     }
 
     .password-component {
+      .component {
+        display: flex;
+      }
+
       input {
         width: 250px;
         height: 40px;
@@ -90,6 +146,9 @@ $button-color: rgb(34, 90, 243);
     }
 
     .conf-password-component {
+      .component {
+        display: flex;
+      }
       input {
         width: 250px;
         height: 40px;

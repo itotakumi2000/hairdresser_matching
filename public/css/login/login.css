@@ -4,12 +4,29 @@
   padding: 100px 0;
 }
 
+.login .error_msg {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 30px;
+  display: inline-block;
+  border: solid red 2px;
+}
+
+.login .error_msg:empty {
+  height: 0;
+  border: none;
+}
+
 .login p {
   margin: 0;
 }
 
 .login input {
   display: block;
+}
+
+.login span {
+  color: red;
 }
 
 .login form div {
@@ -21,9 +38,21 @@
   height: 40px;
 }
 
+.login form .email-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 .login form .password-component input {
   width: 250px;
   height: 40px;
+}
+
+.login form .password-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .login form button {

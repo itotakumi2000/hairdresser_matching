@@ -12,25 +12,43 @@
       rel="stylesheet"
       media="screen,projection"
     />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.0.min.js"></script>
     <title>Document</title>
   </head>
   <body>
     <%- include ('../common/header') %>
     <div class="login">
       <h2>ログイン</h2>
-      <form action="user-login" method="POST" id="form-click">
+      <p class="error_msg"><%= error_msg %></p>
+      <form action="user-login" method="POST" id="form-click" novalidate>
         <div class="email-component">
-          <p>メールアドレス</p>
-          <input type="email" name="email" class="email" />
+          <div class="component">
+            <p>メールアドレス</p>
+            <span class="error_required"></span>
+          </div>
+          <input type="email" name="email" class="email required" id="email" />
+          <span class="error_email"></span>
         </div>
         <div class="password-component">
-          <p>パスワード</p>
-          <input type="password" name="password" class="password" />
+          <div class="component">
+            <p>パスワード</p>
+            <span class="error_required"></span>
+          </div>
+          <input
+            type="password"
+            name="password"
+            class="password required"
+            id="password"
+          />
+          <span class="error_password"></span>
         </div>
-        <button type="submit">送信</button>
+        <button type="submit" id="submit-input">送信</button>
       </form>
     </div>
     <%- include ('../common/footer') %>
     <script src="js/materialize.js"></script>
+    <script src="js/login-validation.js"></script>
   </body>
 </html>

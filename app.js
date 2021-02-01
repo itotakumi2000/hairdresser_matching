@@ -16,11 +16,12 @@ app.get('/', (req, res) => {
 })
 
 app.get('/user-login', (req, res) => {
-  res.render('./user/login.ejs')
+  res.render('./user/login.ejs', {error_msg:""})
 })
 
 app.get('/user-signup', (req, res) => {
-  res.render('./user/signup.ejs')
+  let error_msg = {empty_error_msg:'', inappropriate_error_msgs:[]};
+  res.render('./user/signup.ejs', {error_msg: error_msg})
 })
 
 app.post('/user-login', (req, res) => {
@@ -43,13 +44,19 @@ app.post('/user-login', (req, res) => {
     connection.query('SELECT * FROM user_info WHERE mail =\'' + request_contents[0] +'\';', function (err, rows, fields) {
       if (err) { console.log('err: ' + err)};
 
-      if(bcrypt.compareSync(request_contents[1], rows[0].password)){
-        //ログイン成功時
-
+      if(rows[0] !== undefined){
+        if(bcrypt.compareSync(request_contents[1], rows[0].password)){
+          //ログイン成功時
+          res.render('./user/how-to-use.ejs')
+        }else {
+          //ログイン失敗時（パスワードが間違っているもの）
+          res.render('./user/login.ejs', {error_msg:"エラー：パスワードが間違ってます"})
+        }
       }else {
-        //ログイン失敗時
-
+        //ログイン失敗時（メールが未登録のもの）
+        res.render('./user/login.ejs', {error_msg:"エラー：メールが未登録です"})
       }
+
     });
   })
 })
@@ -71,6 +78,47 @@ app.post('/user-signup', (req, res) => {
       request_contents.push(request_content)
     })
 
+    let error_msg = {empty_error_msg:'', inappropriate_error_msgs:[]};
+
+    //未入力かどうかのバリデーション
+    for(i = 0; i < request_contents.length; i++){
+      if (request_contents[i] === "") {
+        error_msg['empty_error_msg'] = "エラー：未入力の項目があります"
+      }
+    }
+
+    //適切に入力されているかのバリデーション
+    if(request_contents[0].search(/^[ぁ-んァ-ヶー一-龠 　rnt]+$/) === -1){
+      error_msg.inappropriate_error_msgs.push({msg: "適切な名字を入力してください"})
+    }
+    if(request_contents[1].search(/^[ぁ-んァ-ヶー一-龠 　rnt]+$/) === -1){
+      error_msg.inappropriate_error_msgs.push({msg: "適切な名前を入力してください"})
+    }
+    if(request_contents[3].search(/^[0-9]{3}$/) === -1){
+      error_msg.inappropriate_error_msgs.push({msg: "適切な郵便番号を入力してください"})
+    }
+    if(request_contents[4].search(/^[0-9]{4}$/) === -1){
+      error_msg.inappropriate_error_msgs.push({msg: "適切な郵便番号を入力してください"})
+    }
+    if(request_contents[6].search(/^0\d{9,10}$/) === -1){
+      error_msg.inappropriate_error_msgs.push({msg: "適切な電話番号を入力してください"})
+    }
+    if(request_contents[7].search(/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/) === -1){
+      error_msg.inappropriate_error_msgs.push({msg: "適切なメールアドレスを入力してください"})
+    }
+    if(request_contents[8].search(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,100}$/) === -1){
+      error_msg.inappropriate_error_msgs.push({msg: "適切なパスワードを入力してください"})
+    }
+    if(request_contents[8] !== request_contents[9]){
+      error_msg.inappropriate_error_msgs.push({msg: "パスワードが一致しておりません"})
+    }
+
+    if(error_msg.empty_error_msg !== '' || error_msg.inappropriate_error_msgs.length !== 0){
+      res.render('./user/signup.ejs', {error_msg: error_msg})
+      return
+    }
+
+    //パスワードの暗号化
     let password = request_contents[8];
     const saltRounds = 10;
     let hashed_password = bcrypt.hashSync(password, saltRounds);
