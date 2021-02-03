@@ -1,11 +1,20 @@
 const connection = require('./mysql');
 const express = require('express')
+const cookieParser = require('cookie-parser')
 const app = express()
 const bcrypt = require('bcrypt');
 
 app.set("view engine", "ejs")
 
+app.use(cookieParser())
 app.use(express.static("public"))
+
+function turnIntoHash(before_hash){
+  let password = before_hash;
+  const saltRounds = 10;
+  let hashed_password = bcrypt.hashSync(password, saltRounds);
+  return hashed_password;
+}
 
 connection.query('truncate table user_info;', function (err, rows, fields) {
   if (err) { console.log('err: ' + err); } 
@@ -16,7 +25,26 @@ app.get('/', (req, res) => {
 })
 
 app.get('/user-login', (req, res) => {
-  res.render('./user/login.ejs', {error_msg:""})
+  let cookie_value = req.cookies.value;
+  if(cookie_value){
+    let quotation_mark = cookie_value.indexOf('\'');
+    cookie_value = cookie_value.substr(quotation_mark + 1, 60);
+    let before_hash;
+    connection.query('SELECT * FROM user_info;', function (err, rows, fields) {
+      for(i = 0; i < rows.length; i++){
+        if(bcrypt.compareSync(rows[i].mail, cookie_value)){
+          before_hash = rows[i].mail
+        }
+      }
+      if(before_hash){
+        res.render('./user/how-to-use.ejs', {userName : before_hash})
+      }else {
+        res.render('./user/login.ejs', {error_msg:""})
+      }
+    });
+  }else {
+    res.render('./user/login.ejs', {error_msg:""})
+  }
 })
 
 app.get('/user-signup', (req, res) => {
@@ -47,7 +75,12 @@ app.post('/user-login', (req, res) => {
       if(rows[0] !== undefined){
         if(bcrypt.compareSync(request_contents[1], rows[0].password)){
           //ログイン成功時
-          res.render('./user/how-to-use.ejs')
+          let hashed_cookie = turnIntoHash(request_contents[0])
+          res.cookie('value', hashed_cookie, {
+            httpOnly: true,
+            maxAge: 864000000
+          })
+          res.render('./user/how-to-use.ejs', {userName : hashed_cookie})
         }else {
           //ログイン失敗時（パスワードが間違っているもの）
           res.render('./user/login.ejs', {error_msg:"エラー：パスワードが間違ってます"})
@@ -118,14 +151,20 @@ app.post('/user-signup', (req, res) => {
       return
     }
 
-    //パスワードの暗号化
-    let password = request_contents[8];
-    const saltRounds = 10;
-    let hashed_password = bcrypt.hashSync(password, saltRounds);
+    let hashed_password = turnIntoHash(request_contents[8])
 
     connection.query('insert into user_info(lastname, firstname, gender, postalcode, address, tel, mail, password) values (\'' + request_contents[0] + '\', \'' + request_contents[1] + '\', \''+ request_contents[2] + '\', \'' + request_contents[3] + request_contents[4] + '\', \'' + request_contents[5] + '\', \'' + request_contents[6] + '\', \'' + request_contents[7] + '\', \'' + hashed_password + '\');', function (err, rows) {
       if (err) { console.log('err: ' + err); } 
     });
+
+    let hashed_cookie = turnIntoHash(request_contents[7])
+
+    res.cookie('value', hashed_cookie, {
+      httpOnly: true,
+      maxAge: 864000000
+    })
+
+    res.render('./user/how-to-use.ejs', {userName : hashed_cookie})
   })
 })
 
