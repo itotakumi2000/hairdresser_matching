@@ -18,7 +18,7 @@ function turnIntoHash(before_hash){
 
 connection.query('truncate table user_info;', function (err, rows, fields) {
   if (err) { console.log('err: ' + err); } 
-});
+}); 
 
 app.get('/', (req, res) => {
   res.render('./common/index.ejs')
@@ -30,19 +30,18 @@ app.get('/user-login', (req, res) => {
     let quotation_mark = cookie_value.indexOf('\'');
     cookie_value = cookie_value.substr(quotation_mark + 1, 60);
     let before_hash;
-    connection.query('SELECT * FROM user_info;', function (err, rows, fields) {
-      for(i = 0; i < rows.length; i++){
-        if(bcrypt.compareSync(rows[i].mail, cookie_value)){
-          before_hash = rows[i].mail
-        }
-      }
-      if(before_hash){
+    connection.query('SELECT * FROM user_info WHERE hashed_email =\'' + cookie_value +'\';', function (err, rows, fields) {
+      if(rows.length !== 0){
+        //cookie有、DB有
+        before_hash = rows[0].email
         res.render('./user/how-to-use.ejs', {userName : before_hash})
       }else {
+        //cookie有、DB無
         res.render('./user/login.ejs', {error_msg:""})
       }
     });
   }else {
+    //cookie無
     res.render('./user/login.ejs', {error_msg:""})
   }
 })
@@ -69,10 +68,10 @@ app.post('/user-login', (req, res) => {
       request_contents.push(request_content)
     })
 
-    connection.query('SELECT * FROM user_info WHERE mail =\'' + request_contents[0] +'\';', function (err, rows, fields) {
+    connection.query('SELECT * FROM user_info WHERE email =\'' + request_contents[0] +'\';', function (err, rows, fields) {
       if (err) { console.log('err: ' + err)};
 
-      if(rows[0] !== undefined){
+      if(rows.length !== 0){
         if(bcrypt.compareSync(request_contents[1], rows[0].password)){
           //ログイン成功時
           let hashed_cookie = turnIntoHash(request_contents[0])
@@ -151,20 +150,19 @@ app.post('/user-signup', (req, res) => {
       return
     }
 
+    let hashed_email = turnIntoHash(request_contents[7])
     let hashed_password = turnIntoHash(request_contents[8])
 
-    connection.query('insert into user_info(lastname, firstname, gender, postalcode, address, tel, mail, password) values (\'' + request_contents[0] + '\', \'' + request_contents[1] + '\', \''+ request_contents[2] + '\', \'' + request_contents[3] + request_contents[4] + '\', \'' + request_contents[5] + '\', \'' + request_contents[6] + '\', \'' + request_contents[7] + '\', \'' + hashed_password + '\');', function (err, rows) {
+    connection.query('insert into user_info(lastname, firstname, gender, postalcode, address, tel, email, hashed_email, password) values (\'' + request_contents[0] + '\', \'' + request_contents[1] + '\', \''+ request_contents[2] + '\', \'' + request_contents[3] + request_contents[4] + '\', \'' + request_contents[5] + '\', \'' + request_contents[6] + '\', \'' + request_contents[7] + '\', \'' + hashed_email + '\', \'' + hashed_password + '\');', function (err, rows) {
       if (err) { console.log('err: ' + err); } 
     });
 
-    let hashed_cookie = turnIntoHash(request_contents[7])
-
-    res.cookie('value', hashed_cookie, {
+    res.cookie('value', hashed_email, {
       httpOnly: true,
       maxAge: 864000000
     })
 
-    res.render('./user/how-to-use.ejs', {userName : hashed_cookie})
+    res.render('./user/how-to-use.ejs', {userName : hashed_email})
   })
 })
 
