@@ -1,0 +1,172 @@
+.signup {
+  width: 50%;
+  margin: 0 auto;
+  padding: 100px 0;
+}
+
+.signup .empty_error_msg {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 30px;
+  display: inline-block;
+  border: solid red 2px;
+}
+
+.signup .empty_error_msg:empty {
+  display: none;
+}
+
+.signup .inappropriate_error_msg {
+  height: 50px;
+  line-height: 50px;
+  padding: 0 30px;
+  display: inline-block;
+  border: solid red 2px;
+}
+
+.signup .inappropriate_error_msg:empty {
+  display: none;
+}
+
+.signup p {
+  margin: 0;
+}
+
+.signup input {
+  display: block;
+}
+
+.signup span.span-red {
+  color: red;
+}
+
+.signup form div {
+  padding: 10px 0;
+}
+
+.signup form .name {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.signup form .name .lastname-component {
+  margin-right: 30px;
+}
+
+.signup form .name .lastname-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.signup form .name .firstname-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.signup form .name p {
+  display: block;
+}
+
+.signup form .name input {
+  width: 100%;
+  height: 40px;
+}
+
+.signup form .gender .gender-component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.signup form .gender .gender-component p:first-child {
+  margin-right: 20px;
+}
+
+.signup form .postalcode .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.signup form .postalcode .postalcode-component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  padding: 0;
+}
+
+.signup form .postalcode .postalcode-component input {
+  width: 60px;
+  height: 40px;
+}
+
+.signup form .postalcode .postalcode-component p {
+  margin: 10px 20px 0;
+}
+
+.signup form .address-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.signup form .address-component input {
+  width: 250px;
+  height: 40px;
+}
+
+.signup form .telephone-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.signup form .telephone-component input {
+  width: 250px;
+  height: 40px;
+}
+
+.signup form .email-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.signup form .email-component input {
+  width: 250px;
+  height: 40px;
+}
+
+.signup form .password-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.signup form .password-component input {
+  width: 250px;
+  height: 40px;
+}
+
+.signup form .conf-password-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.signup form .conf-password-component input {
+  width: 250px;
+  height: 40px;
+}
+
+.signup form button {
+  width: 80px;
+  height: 40px;
+  background-color: #225af3;
+  color: white;
+  margin-top: 25px;
+}
+/*# sourceMappingURL=signup.css.map */
