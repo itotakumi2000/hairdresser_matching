@@ -3,6 +3,9 @@ const express = require('express')
 const cookieParser = require('cookie-parser')
 const app = express()
 const bcrypt = require('bcrypt');
+const nodemailer = require("nodemailer");
+
+require('dotenv').config();
 
 app.set("view engine", "ejs")
 
@@ -48,6 +51,26 @@ app.get('/user-login', (req, res) => {
     //cookie無
     res.render('./user/login.ejs', {error_msg:""})
   }
+})
+
+app.get('/password-reset', (req, res) => {
+  res.render('./user/password-reset.ejs', {error_msg:"", correct_msg:""})
+})
+
+app.get('/password-reset-form/:email', (req, res) => {
+  let hashed_email = decodeURIComponent(req.params.email.replace(/\+/g, "%20"));
+
+  connection.query('SELECT * FROM user_info WHERE hashed_email =\'' + hashed_email +'\';', function (err, rows, fields) {
+    if (err) { console.log('err: ' + err)};
+
+    if(rows.length !== 0){
+      //ログイン成功時（メールが登録済みのもの）
+      res.render('./common/index.ejs')
+    }else {
+      //ログイン失敗時（メールが未登録のもの）
+      res.render('./user/password-reset.ejs', {error_msg:"エラー：無効なURLです", correct_msg:""})
+    }
+  });
 })
 
 app.get('/user-signup', (req, res) => {
@@ -125,6 +148,59 @@ app.post('/user-login', (req, res) => {
       }
 
     });
+  })
+})
+
+app.post('/password-reset', (req, res) => {
+  let data = '';
+
+  req.on('data', function(chunk) {data += chunk})
+    .on('end', function() {
+
+    data = decodeURIComponent(data.replace(/\+/g, "%20"));
+    data = data.split('&');
+
+    let search_equal = data[0].indexOf("=")
+    let request_content = data[0].substr(search_equal + 1)
+
+    connection.query('SELECT * FROM user_info WHERE email =\'' + request_content +'\';', function (err, rows, fields) {
+      if (err) { console.log('err: ' + err)};
+
+      if(rows.length !== 0){
+        //ログイン成功時（メールが登録済のもの）
+        const smtpConfig = nodemailer.createTransport({
+          service: 'gmail',
+          port: 46,
+          secure: true,
+          auth: {
+              user: process.env.MAIL_ADDRESS,
+              pass: process.env.MAIL_PASSWORD
+          }
+        });
+
+        const message = {
+          from: process.env.MAIL_ADDRESS,
+          to: request_content,
+          subject: 'テストです',
+          text: 'パスワードを再設定するには以下のリンクをクリックしてください\n' + 'http://localhost:3000/password-reset-form/' + encodeURIComponent(rows[0].hashed_email)
+        }
+
+        smtpConfig.sendMail(message, (error, data) => {
+          if(error){
+            console.log(error)
+          }
+          console.log(data);
+        });
+
+        res.render('./user/password-reset.ejs', {error_msg:"", correct_msg:"メールを送信いたしましたのでご確認ください"})
+
+      }else {
+        //ログイン失敗時（メールが未登録のもの）
+        res.render('./user/password-reset.ejs', {error_msg:"エラー：メールが未登録です", correct_msg:""})
+      }
+
+    });
+
   })
 })
 
