@@ -37,7 +37,7 @@ app.get('/user-login', (req, res) => {
     let before_hash;
     let quotation_mark = cookie_value.indexOf('\'');
     cookie_value = cookie_value.substr(quotation_mark + 1, 60);
-    connection.query('SELECT * FROM user_info WHERE hashed_email =\'' + cookie_value +'\';', function (err, rows, fields) {
+    connection.query('SELECT * FROM user_info WHERE hashed_email LIKE \'%' + cookie_value +'%\';', function (err, rows, fields) {
       if(rows.length !== 0){
         //cookie有、DB有
         before_hash = rows[0].email
@@ -65,8 +65,8 @@ app.get('/password-reset-form/:email', (req, res) => {
 
     if(rows.length !== 0){
       //ログイン成功時（メールが登録済みのもの）
-      res.render('./user/login.ejs', {error_msg:""})
-      res.end()
+      let error_msg = {empty_error_msg:'', inappropriate_error_msgs:[]};
+      res.render('./user/password-reset-form.ejs', {error_msg:error_msg, entered_email:rows[0].email})
     }else {
       //ログイン失敗時（メールが未登録のもの）
       res.render('./user/password-reset.ejs', {error_msg:"エラー：無効なURLです", correct_msg:""})
@@ -200,6 +200,67 @@ app.post('/password-reset', (req, res) => {
         res.render('./user/password-reset.ejs', {error_msg:"エラー：メールが未登録です", correct_msg:""})
       }
 
+    });
+
+  })
+})
+
+app.post('/password-reset-form', (req, res) => {
+  let data = '';
+
+  req.on('data', function(chunk) {data += chunk})
+    .on('end', function() {
+
+    data = decodeURIComponent(data.replace(/\+/g, "%20"));
+    data = data.split('&');
+
+    let request_contents = [];
+
+    data.forEach((value) => {
+      let search_equal = value.indexOf("=")
+      let request_content = value.substr(search_equal + 1)
+      request_contents.push(request_content)
+    })
+
+    console.log(request_contents)
+
+    let error_msg = {empty_error_msg:'', inappropriate_error_msgs:[]};
+
+    //未入力かどうかのバリデーション
+    for(i = 0; i < request_contents.length; i++){
+      if (request_contents[i] === "") {
+        error_msg['empty_error_msg'] = "エラー：未入力の項目があります"
+      }
+    }
+
+    //適切に入力されているかのバリデーション
+    if(request_contents[1].search(/^(?=.*?[a-z])(?=.*?[A-Z])(?=.*?\d)[a-zA-Z\d]{8,100}$/) === -1){
+      error_msg.inappropriate_error_msgs.push({msg: "適切なパスワードを入力してください"})
+    }
+    if(request_contents[1] !== request_contents[2]){
+      error_msg.inappropriate_error_msgs.push({msg: "パスワードが一致しておりません"})
+    }
+
+    if(error_msg.empty_error_msg !== '' || error_msg.inappropriate_error_msgs.length !== 0){
+      res.render('./user/password-reset-form.ejs', {error_msg: error_msg, entered_email:request_contents[0]})
+      return
+    }
+
+    let hashed_password = turnIntoHash(request_contents[1])
+
+    connection.query('update user_info set password=\'' + hashed_password + '\' where email=\'' + request_contents[0] + '\';', function (err, rows) {
+      if (err) { console.log('err: ' + err); }
+    });
+
+    connection.query('SELECT * FROM user_info WHERE email=\'' + request_contents[0] + '\';', function (err, rows) {
+      if (err) { console.log('err: ' + err); }
+
+      res.cookie('value', rows[0].hashed_email, {
+        httpOnly: true,
+        maxAge: 10
+      })
+
+      res.render('./user/how-to-use.ejs', {userName : rows[0].hashed_email})
     });
 
   })
