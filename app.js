@@ -65,7 +65,8 @@ app.get('/password-reset-form/:email', (req, res) => {
 
     if(rows.length !== 0){
       //ログイン成功時（メールが登録済みのもの）
-      res.render('./common/index.ejs')
+      res.render('./user/login.ejs', {error_msg:""})
+      res.end()
     }else {
       //ログイン失敗時（メールが未登録のもの）
       res.render('./user/password-reset.ejs', {error_msg:"エラー：無効なURLです", correct_msg:""})
@@ -135,7 +136,7 @@ app.post('/user-login', (req, res) => {
           let hashed_cookie = turnIntoHash(request_contents[0])
           res.cookie('value', hashed_cookie, {
             httpOnly: true,
-            maxAge: 864000000
+            maxAge: 10
           })
           res.render('./user/how-to-use.ejs', {userName : hashed_cookie})
         }else {
@@ -270,7 +271,7 @@ app.post('/user-signup', (req, res) => {
 
     res.cookie('value', hashed_email, {
       httpOnly: true,
-      maxAge: 864000000
+      maxAge: 10
     })
 
     res.render('./user/how-to-use.ejs', {userName : hashed_email})
@@ -303,7 +304,7 @@ app.post('/hairdresser-login', (req, res) => {
           let hashed_cookie = turnIntoHash(request_contents[0])
           res.cookie('value', hashed_cookie, {
             httpOnly: true,
-            maxAge: 864000000
+            maxAge: 10
           })
           res.render('./user/how-to-use.ejs', {userName : hashed_cookie})
         }else {
@@ -385,7 +386,7 @@ app.post('/hairdresser-signup', (req, res) => {
 
     res.cookie('value', hashed_email, {
       httpOnly: true,
-      maxAge: 864000000
+      maxAge: 10
     })
 
     res.render('./user/how-to-use.ejs', {userName : hashed_email})
