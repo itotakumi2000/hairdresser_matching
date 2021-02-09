@@ -1,13 +1,15 @@
-var mysql = require('mysql');
+const mysql = require('mysql');
 
-var dbConfig = {
+require('dotenv').config();
+
+const dbConfig = {
   host     : 'localhost', //接続先ホスト
   user     : 'root',      //ユーザー名
-  password : '@Takumi0730',          //パスワード
+  password : process.env.MYSQL_PASSWORD,          //パスワード
   database : 'matching_db'       //DB名
 };
 
-var connection;
+let connection;
 
 function handleDisconnect() {
     console.log('create mysql connection');
@@ -31,7 +33,7 @@ function handleDisconnect() {
         }
     });
 
-    module.exports = connection; //connectionを(他のファイルから)requireで呼び出せるようにする
+    module.exports = connection;
 }
 
 handleDisconnect();
