@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser')
 const app = express()
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
+const multer = require('multer');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -11,6 +13,9 @@ app.set("view engine", "ejs")
 
 app.use(cookieParser())
 app.use(express.static("public"))
+
+const upDir = path.join(__dirname, 'public/img/cosmetology_license');
+const uploadDir = multer({dest: upDir});
 
 function turnIntoHash(before_hash){
   const saltRounds = 10;
@@ -136,7 +141,7 @@ app.post('/user-login', (req, res) => {
           let hashed_cookie = turnIntoHash(request_contents[0])
           res.cookie('value', hashed_cookie, {
             httpOnly: true,
-            maxAge: 10
+            maxAge: 864000000
           })
           res.render('./user/how-to-use.ejs', {userName : hashed_cookie})
         }else {
@@ -222,8 +227,6 @@ app.post('/password-reset-form', (req, res) => {
       request_contents.push(request_content)
     })
 
-    console.log(request_contents)
-
     let error_msg = {empty_error_msg:'', inappropriate_error_msgs:[]};
 
     //未入力かどうかのバリデーション
@@ -257,7 +260,7 @@ app.post('/password-reset-form', (req, res) => {
 
       res.cookie('value', rows[0].hashed_email, {
         httpOnly: true,
-        maxAge: 10
+        maxAge: 864000000
       })
 
       res.render('./user/how-to-use.ejs', {userName : rows[0].hashed_email})
@@ -332,7 +335,7 @@ app.post('/user-signup', (req, res) => {
 
     res.cookie('value', hashed_email, {
       httpOnly: true,
-      maxAge: 10
+      maxAge: 864000000
     })
 
     res.render('./user/how-to-use.ejs', {userName : hashed_email})
@@ -381,11 +384,11 @@ app.post('/hairdresser-login', (req, res) => {
   })
 })
 
-app.post('/hairdresser-signup', (req, res) => {
+app.post('/hairdresser-signup', uploadDir.single('image_upload'), (req, res) => {
   let data = '';
 
   req.on('data', function(chunk) {data += chunk})
-    .on('end', function() {
+  .on('end', function() {
 
     data = decodeURIComponent(data.replace(/\+/g, "%20"));
     data = data.split('&');
@@ -438,20 +441,29 @@ app.post('/hairdresser-signup', (req, res) => {
       return
     }
 
+
     let hashed_email = turnIntoHash(request_contents[7])
     let hashed_password = turnIntoHash(request_contents[8])
 
-    connection.query('insert into hairdresser_info(lastname, firstname, gender, postalcode, address, tel, email, hashed_email, password) values (\'' + request_contents[0] + '\', \'' + request_contents[1] + '\', \''+ request_contents[2] + '\', \'' + request_contents[3] + request_contents[4] + '\', \'' + request_contents[5] + '\', \'' + request_contents[6] + '\', \'' + request_contents[7] + '\', \'' + hashed_email + '\', \'' + hashed_password + '\');', function (err, rows) {
+    connection.query('INSERT INTO hairdresser_info (lastname, firstname, gender, postalcode, address, tel, email, hashed_email, password) values (\'' + request_contents[0] + '\', \'' + request_contents[1] + '\', \''+ request_contents[2] + '\', \'' + request_contents[3] + request_contents[4] + '\', \'' + request_contents[5] + '\', \'' + request_contents[6] + '\', \'' + request_contents[7] + '\', \'' + hashed_email + '\', \'' + hashed_password + '\');', function (err, rows) {
       if (err) { console.log('err: ' + err); }
     });
 
     res.cookie('value', hashed_email, {
       httpOnly: true,
-      maxAge: 10
+      maxAge: 864000000
     })
 
-    res.render('./user/how-to-use.ejs', {userName : hashed_email})
+    res.render('./hairdresser/imgupload.ejs')
   })
+})
+
+app.post('/imgupload', uploadDir.single('upFile'), (req, res) => {
+  connection.query('UPDATE hairdresser_info SET qualification=\'' + req.file.path + '\' WHERE hashed_email=\'' + req.cookies.value + '\';', function (err, rows, fields) {
+    if (err) { console.log('err: ' + err)};
+  });
+
+  res.render('./hairdresser/login-complete.ejs')
 })
 
 app.listen(3000, () => {
