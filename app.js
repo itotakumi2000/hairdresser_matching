@@ -4,6 +4,8 @@ const cookieParser = require('cookie-parser')
 const app = express()
 const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
+const multer = require('multer');
+const path = require('path');
 
 require('dotenv').config();
 
@@ -11,6 +13,9 @@ app.set("view engine", "ejs")
 
 app.use(cookieParser())
 app.use(express.static("public"))
+
+const upDir = path.join(__dirname, 'public/img/cosmetology_license');
+const uploadDir = multer({dest: upDir});
 
 function turnIntoHash(before_hash){
   const saltRounds = 10;
@@ -222,8 +227,6 @@ app.post('/password-reset-form', (req, res) => {
       request_contents.push(request_content)
     })
 
-    console.log(request_contents)
-
     let error_msg = {empty_error_msg:'', inappropriate_error_msgs:[]};
 
     //未入力かどうかのバリデーション
@@ -381,11 +384,11 @@ app.post('/hairdresser-login', (req, res) => {
   })
 })
 
-app.post('/hairdresser-signup', (req, res) => {
+app.post('/hairdresser-signup', uploadDir.single('image_upload'), (req, res) => {
   let data = '';
 
   req.on('data', function(chunk) {data += chunk})
-    .on('end', function() {
+  .on('end', function() {
 
     data = decodeURIComponent(data.replace(/\+/g, "%20"));
     data = data.split('&');
@@ -438,6 +441,7 @@ app.post('/hairdresser-signup', (req, res) => {
       return
     }
 
+
     let hashed_email = turnIntoHash(request_contents[7])
     let hashed_password = turnIntoHash(request_contents[8])
 
@@ -450,8 +454,14 @@ app.post('/hairdresser-signup', (req, res) => {
       maxAge: 10
     })
 
-    res.render('./user/how-to-use.ejs', {userName : hashed_email})
+    res.render('./hairdresser/imgupload.ejs')
   })
+})
+
+app.post('/imgupload', uploadDir.single('upFile'), (req, res) => {
+  console.log('アップロードしたファイル名： ' + req.file.originalname);
+  console.log('保存されたパス：' + req.file.path);
+  console.log('保存されたファイル名： ' + req.file.filename);
 })
 
 app.listen(3000, () => {
