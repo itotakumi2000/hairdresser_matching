@@ -1,0 +1,23 @@
+nav {
+  background-color: blue;
+  height: 70px;
+
+  ul {
+    margin: 0;
+    display: flex;
+    height: 70px;
+
+    li {
+      list-style: none;
+      width: 33.33333%;
+      text-align: center;
+      border-right: 1px solid white;
+      line-height: 70px;
+
+      a {
+        color: white;
+        text-decoration: none;
+      }
+    }
+  }
+}

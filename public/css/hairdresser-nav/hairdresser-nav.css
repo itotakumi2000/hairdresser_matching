@@ -1,0 +1,26 @@
+nav {
+  background-color: blue;
+  height: 70px;
+}
+
+nav ul {
+  margin: 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  height: 70px;
+}
+
+nav ul li {
+  list-style: none;
+  width: 33.33333%;
+  text-align: center;
+  border-right: 1px solid white;
+  line-height: 70px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+}
+/*# sourceMappingURL=hairdresser-nav.css.map */

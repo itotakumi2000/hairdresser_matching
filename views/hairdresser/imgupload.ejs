@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="css/normalize.css" />
-    <link rel="stylesheet" href="css/hairdresser-signup/signup.css" />
+    <link rel="stylesheet" href="css/imgupload/imgupload.css" />
     <link
       href="css/materialize.css"
       type="text/css"
@@ -19,10 +19,13 @@
   </head>
   <body>
     <%- include ('../common/header') %>
-    <form method="POST" action="/imgupload" enctype="multipart/form-data">
-      <input type="file" name="upFile" />
-      <input type="submit" value="アップロード" />
-    </form>
+    <div class="imguploadcontainer">
+      <h2>美容師資格画像アップロード</h2>
+      <form method="POST" action="/imgupload" enctype="multipart/form-data">
+        <input type="file" name="upFile" />
+        <input type="submit" value="アップロード" />
+      </form>
+    </div>
     <%- include ('../common/footer') %>
     <script src="js/materialize.js"></script>
     <script src="js/hairdresser-signup-validation.js"></script>

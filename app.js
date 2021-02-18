@@ -17,6 +17,9 @@ app.use(express.static("public"))
 const upDir = path.join(__dirname, 'public/img/cosmetology_license');
 const uploadDir = multer({dest: upDir});
 
+const public_profile_img_upDir = path.join(__dirname, 'public/img/public_profile_img/');
+const public_profile_img_uploadDir = multer({dest: public_profile_img_upDir});
+
 function turnIntoHash(before_hash){
   const saltRounds = 10;
   let password = before_hash;
@@ -24,13 +27,13 @@ function turnIntoHash(before_hash){
   return hashed_password;
 }
 
-connection.query('truncate table user_info;', function (err, rows, fields) {
-  if (err) { console.log('err: ' + err); }
-});
+// connection.query('truncate table user_info;', function (err, rows, fields) {
+//   if (err) { console.log('err: ' + err); }
+// });
 
-connection.query('truncate table hairdresser_info;', function (err, rows, fields) {
-  if (err) { console.log('err: ' + err); }
-});
+// connection.query('truncate table hairdresser_info;', function (err, rows, fields) {
+//   if (err) { console.log('err: ' + err); }
+// });
 
 app.get('/', (req, res) => {
   res.render('./common/index.ejs')
@@ -94,11 +97,11 @@ app.get('/hairdresser-login', (req, res) => {
     let before_hash;
     let quotation_mark = cookie_value.indexOf('\'');
     cookie_value = cookie_value.substr(quotation_mark + 1, 60);
-    connection.query('SELECT * FROM user_info WHERE hashed_email =\'' + cookie_value +'\';', function (err, rows, fields) {
+    connection.query('SELECT * FROM hairdresser_info WHERE hashed_email =\'' + cookie_value +'\';', function (err, rows, fields) {
       if(rows.length !== 0){
         //cookie有、DB有
         before_hash = rows[0].email
-        res.render('./user/how-to-use.ejs', {userName : before_hash})
+        res.render('./hairdresser/how-to-use.ejs', {userName : before_hash})
       }else {
         //cookie有、DB無
         res.render('./hairdresser/login.ejs', {error_msg:""})
@@ -113,6 +116,18 @@ app.get('/hairdresser-login', (req, res) => {
 app.get('/hairdresser-signup', (req, res) => {
   let error_msg = {empty_error_msg:'', inappropriate_error_msgs:[]};
   res.render('./hairdresser/signup.ejs', {error_msg: error_msg})
+})
+
+app.get('/hairdresser-how-to-use', (req, res) => {
+  res.render('./hairdresser/how-to-use')
+})
+
+app.get('/hairdresser-public-profile', (req, res) => {
+  res.render('./hairdresser/public-profile')
+})
+
+app.get('/hairdresser-info', (req, res) => {
+  res.render('./hairdresser/hairdresser-info')
 })
 
 app.post('/user-login', (req, res) => {
@@ -368,9 +383,9 @@ app.post('/hairdresser-login', (req, res) => {
           let hashed_cookie = turnIntoHash(request_contents[0])
           res.cookie('value', hashed_cookie, {
             httpOnly: true,
-            maxAge: 10
+            maxAge: 864000000
           })
-          res.render('./user/how-to-use.ejs', {userName : hashed_cookie})
+          res.render('./hairdresser/how-to-use.ejs')
         }else {
           //ログイン失敗時（パスワードが間違っているもの）
           res.render('./hairdresser/login.ejs', {error_msg:"エラー：パスワードが間違ってます"})
@@ -464,6 +479,160 @@ app.post('/imgupload', uploadDir.single('upFile'), (req, res) => {
   });
 
   res.render('./hairdresser/login-complete.ejs')
+})
+
+app.post('/public-profile-imgupload', public_profile_img_uploadDir.single('public-profile-imgupload-upFile'), (req, res) => {
+  connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.value + '\';', function (err, rows, fields) {
+    if (err) { console.log('err: ' + err)};
+    let dresser_id =rows[0].id
+
+    if(rows.length !== 0){
+      connection.query('SELECT * FROM public_profile WHERE dresser_id=\'' + dresser_id + '\';', function (err, rows, fields) {
+        if (err) { console.log('err: ' + err)};
+
+        if(rows.length !== 0){
+          connection.query('update public_profile set profile_img=\'' + req.file.path  + '\' where dresser_id=\'' + dresser_id  + '\';', function (err, rows, fields) {
+            if (err) { console.log('err: ' + err)};
+          });
+        }else {
+          connection.query('insert into public_profile(dresser_id, profile_img) values (\'' + dresser_id + '\', \'' + req.file.path + '\');', function (err, rows, fields) {
+            if (err) { console.log('err: ' + err)};
+          });
+        }
+      });
+    }else {
+      console.log("cookie情報がありませんよ")
+    }
+  });
+})
+
+app.post('/basic-info', (req, res) => {
+  let data = '';
+
+  req.on('data', function(chunk) {data += chunk})
+  .on('end', function() {
+
+    data = decodeURIComponent(data.replace(/\+/g, "%20"));
+    data = data.split('&');
+
+    let request_contents = [];
+
+    data.forEach((value) => {
+      let search_equal = value.indexOf("=")
+      let request_content = value.substr(search_equal + 1)
+      request_contents.push(request_content)
+    })
+
+    connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.value + '\';', function (err, rows, fields) {
+      if (err) { console.log('err: ' + err)};
+      let dresser_id =rows[0].id
+
+      if(rows.length !== 0){
+        connection.query('SELECT * FROM public_profile WHERE dresser_id=\'' + dresser_id + '\';', function (err, rows, fields) {
+          if (err) { console.log('err: ' + err)};
+
+          if(rows.length !== 0){
+            connection.query('update public_profile set nickname=\'' + request_contents[0]  + '\', workplace=\'' + request_contents[1]  + '\', business_experience=\'' + request_contents[2]  + '\' where dresser_id=\'' + dresser_id  + '\';', function (err, rows, fields) {
+              if (err) { console.log('err: ' + err)};
+            });
+          }else {
+            connection.query('insert into public_profile(dresser_id, nickname, workplace, business_experience) values (\'' + dresser_id + '\', \'' + request_contents[0] + '\', \'' + request_contents[1] + '\', \'' + request_contents[2] + '\');', function (err, rows, fields) {
+              if (err) { console.log('err: ' + err)};
+            });
+          }
+        });
+      }else {
+        console.log("cookie情報がありません")
+      }
+    });
+
+  })
+})
+
+app.post('/cut-form',(req, res) => {
+  let data = '';
+
+  req.on('data', function(chunk) {data += chunk})
+  .on('end', function() {
+
+    data = decodeURIComponent(data.replace(/\+/g, "%20"));
+    data = data.split('&');
+
+    let request_contents = [];
+
+    data.forEach((value) => {
+      let search_equal = value.indexOf("=")
+      let request_content = value.substr(search_equal + 1)
+      request_contents.push(request_content)
+    })
+
+    connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.value + '\';', function (err, rows, fields) {
+      if (err) { console.log('err: ' + err)};
+      let dresser_id =rows[0].id
+
+      if(rows.length !== 0){
+        connection.query('SELECT * FROM public_profile WHERE dresser_id=\'' + dresser_id + '\';', function (err, rows, fields) {
+          if (err) { console.log('err: ' + err)};
+
+          if(rows.length !== 0){
+            connection.query('update public_profile set cut=\'' + request_contents[0]  + '\' where dresser_id=\'' + dresser_id  + '\';', function (err, rows, fields) {
+              if (err) { console.log('err: ' + err)};
+            });
+          }else {
+            connection.query('insert into public_profile(dresser_id, cut) values (\'' + dresser_id + '\', \'' + request_contents[0] + '\');', function (err, rows, fields) {
+              if (err) { console.log('err: ' + err)};
+            });
+          }
+        });
+      }else {
+        console.log("cookie情報がありません")
+      }
+    });
+
+  })
+})
+
+app.post('/introduction-form',(req, res) => {
+  let data = '';
+
+  req.on('data', function(chunk) {data += chunk})
+  .on('end', function() {
+
+    data = decodeURIComponent(data.replace(/\+/g, "%20"));
+    data = data.split('&');
+
+    let request_contents = [];
+
+    data.forEach((value) => {
+      let search_equal = value.indexOf("=")
+      let request_content = value.substr(search_equal + 1)
+      request_contents.push(request_content)
+    })
+
+    connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.value + '\';', function (err, rows, fields) {
+      if (err) { console.log('err: ' + err)};
+      let dresser_id =rows[0].id
+
+      if(rows.length !== 0){
+        connection.query('SELECT * FROM public_profile WHERE dresser_id=\'' + dresser_id + '\';', function (err, rows, fields) {
+          if (err) { console.log('err: ' + err)};
+
+          if(rows.length !== 0){
+            connection.query('update public_profile set introduction=\'' + request_contents[0]  + '\' where dresser_id=\'' + dresser_id  + '\';', function (err, rows, fields) {
+              if (err) { console.log('err: ' + err)};
+            });
+          }else {
+            connection.query('insert into public_profile(dresser_id, introduction) values (\'' + dresser_id + '\', \'' + request_contents[0] + '\');', function (err, rows, fields) {
+              if (err) { console.log('err: ' + err)};
+            });
+          }
+        });
+      }else {
+        console.log("cookie情報がありません")
+      }
+    });
+
+  })
 })
 
 app.listen(3000, () => {
