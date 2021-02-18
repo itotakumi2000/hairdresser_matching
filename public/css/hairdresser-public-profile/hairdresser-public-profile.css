@@ -1,0 +1,173 @@
+.public-profile {
+  width: 50%;
+  margin: 0 auto;
+  padding: 100px 0;
+}
+
+.public-profile h2 {
+  margin: 0;
+  margin-bottom: 70px;
+}
+
+.public-profile p {
+  margin: 0;
+}
+
+.public-profile input {
+  display: block;
+}
+
+.public-profile span.span-red {
+  color: red;
+}
+
+.public-profile .imgupload-component {
+  margin-bottom: 20px;
+}
+
+.public-profile .imgupload-component p {
+  margin-bottom: 15px;
+}
+
+.public-profile .imgupload-component form input {
+  display: block;
+}
+
+.public-profile .imgupload-component form button {
+  width: 80px;
+  height: 40px;
+  background-color: #225af3;
+  color: white;
+  margin: 25px 0;
+}
+
+.public-profile #basic-info .name-component {
+  padding: 10px 0;
+}
+
+.public-profile #basic-info .name-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.public-profile #basic-info .name-component .component p {
+  margin-bottom: 15px;
+}
+
+.public-profile #basic-info .name-component .component .error_required {
+  color: red;
+}
+
+.public-profile #basic-info .name-component input {
+  width: 250px;
+  height: 40px;
+}
+
+.public-profile #basic-info .workplace-component {
+  padding: 10px 0;
+}
+
+.public-profile #basic-info .workplace-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.public-profile #basic-info .workplace-component .component p {
+  margin-bottom: 15px;
+}
+
+.public-profile #basic-info .workplace-component .component .error_required {
+  color: red;
+}
+
+.public-profile #basic-info .workplace-component input {
+  width: 250px;
+  height: 40px;
+}
+
+.public-profile #basic-info .business-experience-component {
+  padding: 10px 0;
+}
+
+.public-profile #basic-info .business-experience-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.public-profile #basic-info .business-experience-component .component p {
+  margin-bottom: 15px;
+}
+
+.public-profile #basic-info .business-experience-component .component .error_required {
+  color: red;
+}
+
+.public-profile #basic-info .business-experience-component input {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+}
+
+.public-profile #basic-info button {
+  width: 80px;
+  height: 40px;
+  background-color: #225af3;
+  color: white;
+  margin: 25px 0;
+}
+
+.public-profile #cut-form .cut-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.public-profile #cut-form .cut-component .component p {
+  margin-bottom: 15px;
+}
+
+.public-profile #cut-form .cut-component .component .error_required {
+  color: red;
+}
+
+.public-profile #cut-form .cut-component .cut {
+  height: 100px;
+}
+
+.public-profile #cut-form button {
+  width: 80px;
+  height: 40px;
+  background-color: #225af3;
+  color: white;
+  margin: 25px 0;
+}
+
+.public-profile #introduction-form .introduction-component .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.public-profile #introduction-form .introduction-component .component p {
+  margin-bottom: 15px;
+}
+
+.public-profile #introduction-form .introduction-component .component .error_required {
+  color: red;
+}
+
+.public-profile #introduction-form .introduction-component .introduction {
+  height: 100px;
+}
+
+.public-profile #introduction-form button {
+  width: 80px;
+  height: 40px;
+  background-color: #225af3;
+  color: white;
+  margin: 25px 0;
+}
+/*# sourceMappingURL=hairdresser-public-profile.css.map */

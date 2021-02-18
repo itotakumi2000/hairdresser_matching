@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="css/normalize.css" />
+    <link
+      rel="stylesheet"
+      href="css/hairdresser-public-profile/hairdresser-public-profile.css"
+    />
+    <link
+      href="css/materialize.css"
+      type="text/css"
+      rel="stylesheet"
+      media="screen,projection"
+    />
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.5.0.min.js"></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <%- include ('../common/header') %> <%- include ('./nav') %>
+    <div class="public-profile">
+      <h2>美容師公開プロフィール</h2>
+      <div class="imgupload-component">
+        <p>プロフィール画像</p>
+        <form
+          method="POST"
+          action="/public-profile-imgupload"
+          enctype="multipart/form-data"
+        >
+          <input type="file" name="public-profile-imgupload-upFile" />
+          <button type="submit">更新</button>
+        </form>
+      </div>
+      <form action="/basic-info" method="POST" id="basic-info" novalidate>
+        <div class="name-component">
+          <div class="component">
+            <p>お名前（ニックネームも可）</p>
+            <span class="error_required"></span>
+          </div>
+          <input type="text" name="name" class="name required" id="name" />
+          <span class="error_name span-red"></span>
+        </div>
+        <div class="workplace-component">
+          <div class="component">
+            <p>勤務先（任意）</p>
+            <span class="error_required"></span>
+          </div>
+          <input
+            type="text"
+            name="workplace"
+            class="workplace"
+            id="workplace"
+          />
+          <span class="error_workplace span-red"></span>
+        </div>
+        <div class="business-experience-component">
+          <div class="component">
+            <p>実務年数</p>
+            <span class="error_required"></span>
+          </div>
+          <input
+            type="number"
+            name="business-experience"
+            class="business-experience required"
+            id="business-experience"
+            pattern="\d*"
+          />
+          <span>年</span>
+          <span class="error_business_experience span-red"></span>
+        </div>
+        <button type="submit">更新</button>
+      </form>
+      <form action="/cut-form" method="POST" id="cut-form" novalidate>
+        <div class="cut-component">
+          <div class="component">
+            <p>得意なカット</p>
+            <span class="error_required"></span>
+          </div>
+          <textarea name="cut" class="cut required"></textarea>
+          <span class="error_cut span-red"></span>
+        </div>
+        <button type="submit">更新</button>
+      </form>
+      <form
+        action="/introduction-form"
+        method="POST"
+        id="introduction-form"
+        novalidate
+      >
+        <div class="introduction-component">
+          <div class="component">
+            <p>自己紹介</p>
+            <span class="error_required"></span>
+          </div>
+          <textarea
+            name="introduction"
+            class="introduction required"
+            id="introduction"
+          ></textarea>
+          <span class="error_introduction span-red"></span>
+        </div>
+        <button type="submit">更新</button>
+      </form>
+    </div>
+    <%- include ('../common/footer') %>
+    <script src="js/materialize.js"></script>
+    <script src="js/public-profile-validation.js"></script>
+  </body>
+</html>
