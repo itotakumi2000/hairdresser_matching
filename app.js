@@ -123,7 +123,20 @@ app.get('/hairdresser-how-to-use', (req, res) => {
 })
 
 app.get('/hairdresser-public-profile', (req, res) => {
-  res.render('./hairdresser/public-profile')
+  connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.value + '\';', function (err, rows, fields) {
+    if (err) { console.log('err: ' + err)};
+    let dresser_id =rows[0].id
+
+    if(rows.length !== 0){
+      connection.query('SELECT * FROM public_profile WHERE dresser_id=\'' + dresser_id + '\';', function (err, rows, fields) {
+        if (err) { console.log('err: ' + err)};
+
+        res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace:rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: rows[0].introduction})
+      });
+    }else {
+      console.log("cookie情報がありません")
+    }
+  });
 })
 
 app.get('/hairdresser-info', (req, res) => {
@@ -540,6 +553,9 @@ app.post('/basic-info', (req, res) => {
               if (err) { console.log('err: ' + err)};
             });
           }
+
+          res.render('./hairdresser/public-profile.ejs', {nickname: request_contents[0], workplace: request_contents[1], business_experience: request_contents[2], cut: rows[0].cut, introduction: rows[0].introduction})
+
         });
       }else {
         console.log("cookie情報がありません")
@@ -583,6 +599,8 @@ app.post('/cut-form',(req, res) => {
               if (err) { console.log('err: ' + err)};
             });
           }
+
+          res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace: rows[0].workplace, business_experience: rows[0].business_experience, cut: request_contents[0], introduction: rows[0].introduction})
         });
       }else {
         console.log("cookie情報がありません")
@@ -626,6 +644,7 @@ app.post('/introduction-form',(req, res) => {
               if (err) { console.log('err: ' + err)};
             });
           }
+          res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace: rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: request_contents[0]})
         });
       }else {
         console.log("cookie情報がありません")

@@ -41,7 +41,13 @@
             <p>お名前（ニックネームも可）</p>
             <span class="error_required"></span>
           </div>
-          <input type="text" name="name" class="name required" id="name" />
+          <input
+            type="text"
+            name="name"
+            class="name required"
+            id="name"
+            value="<%= nickname %>"
+          />
           <span class="error_name span-red"></span>
         </div>
         <div class="workplace-component">
@@ -54,6 +60,7 @@
             name="workplace"
             class="workplace"
             id="workplace"
+            value="<%= workplace %>"
           />
           <span class="error_workplace span-red"></span>
         </div>
@@ -68,6 +75,7 @@
             class="business-experience required"
             id="business-experience"
             pattern="\d*"
+            value="<%= business_experience %>"
           />
           <span>年</span>
           <span class="error_business_experience span-red"></span>
@@ -80,7 +88,7 @@
             <p>得意なカット</p>
             <span class="error_required"></span>
           </div>
-          <textarea name="cut" class="cut required"></textarea>
+          <textarea name="cut" class="cut required"><%= cut %></textarea>
           <span class="error_cut span-red"></span>
         </div>
         <button type="submit">更新</button>
@@ -100,7 +108,9 @@
             name="introduction"
             class="introduction required"
             id="introduction"
-          ></textarea>
+          >
+<%= introduction %></textarea
+          >
           <span class="error_introduction span-red"></span>
         </div>
         <button type="submit">更新</button>
