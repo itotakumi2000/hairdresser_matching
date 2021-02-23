@@ -93,6 +93,7 @@ app.get('/hairdresser-top', (req, res) => {
 
 app.get('/hairdresser-login', (req, res) => {
   let cookie_value = req.cookies.value;
+  console.log(cookie_value)
   if(cookie_value){
     let before_hash;
     let quotation_mark = cookie_value.indexOf('\'');
@@ -131,7 +132,12 @@ app.get('/hairdresser-public-profile', (req, res) => {
       connection.query('SELECT * FROM public_profile WHERE dresser_id=\'' + dresser_id + '\';', function (err, rows, fields) {
         if (err) { console.log('err: ' + err)};
 
-        res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace:rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: rows[0].introduction})
+        if(rows.length !== 0){
+          res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace:rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: rows[0].introduction})
+        } else {
+          res.render('./hairdresser/public-profile.ejs', {nickname: "", workplace:"", business_experience: "", cut: "", introduction: ""})
+        }
+
       });
     }else {
       console.log("cookie情報がありません")
