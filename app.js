@@ -27,20 +27,12 @@ function turnIntoHash(before_hash){
   return hashed_password;
 }
 
-// connection.query('truncate table user_info;', function (err, rows, fields) {
-//   if (err) { console.log('err: ' + err); }
-// });
-
-// connection.query('truncate table hairdresser_info;', function (err, rows, fields) {
-//   if (err) { console.log('err: ' + err); }
-// });
-
 app.get('/', (req, res) => {
   res.render('./common/index.ejs')
 })
 
 app.get('/user-login', (req, res) => {
-  let cookie_value = req.cookies.value;
+  let cookie_value = req.cookies.user_value;
   if(cookie_value){
     let before_hash;
     let quotation_mark = cookie_value.indexOf('\'');
@@ -92,8 +84,7 @@ app.get('/hairdresser-top', (req, res) => {
 })
 
 app.get('/hairdresser-login', (req, res) => {
-  let cookie_value = req.cookies.value;
-  console.log(cookie_value)
+  let cookie_value = req.cookies.hairdresser_value;
   if(cookie_value){
     let before_hash;
     let quotation_mark = cookie_value.indexOf('\'');
@@ -124,7 +115,7 @@ app.get('/hairdresser-how-to-use', (req, res) => {
 })
 
 app.get('/hairdresser-public-profile', (req, res) => {
-  connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.value + '\';', function (err, rows, fields) {
+  connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.hairdresser_value + '\';', function (err, rows, fields) {
     if (err) { console.log('err: ' + err)};
     let dresser_id =rows[0].id
 
@@ -173,7 +164,7 @@ app.post('/user-login', (req, res) => {
         if(bcrypt.compareSync(request_contents[1], rows[0].password)){
           //ログイン成功時
           let hashed_cookie = turnIntoHash(request_contents[0])
-          res.cookie('value', hashed_cookie, {
+          res.cookie('user_value', hashed_cookie, {
             httpOnly: true,
             maxAge: 864000000
           })
@@ -292,7 +283,7 @@ app.post('/password-reset-form', (req, res) => {
     connection.query('SELECT * FROM user_info WHERE email=\'' + request_contents[0] + '\';', function (err, rows) {
       if (err) { console.log('err: ' + err); }
 
-      res.cookie('value', rows[0].hashed_email, {
+      res.cookie('user_value', rows[0].hashed_email, {
         httpOnly: true,
         maxAge: 864000000
       })
@@ -367,7 +358,7 @@ app.post('/user-signup', (req, res) => {
       if (err) { console.log('err: ' + err); }
     });
 
-    res.cookie('value', hashed_email, {
+    res.cookie('user_value', hashed_email, {
       httpOnly: true,
       maxAge: 864000000
     })
@@ -400,7 +391,7 @@ app.post('/hairdresser-login', (req, res) => {
         if(bcrypt.compareSync(request_contents[1], rows[0].password)){
           //ログイン成功時
           let hashed_cookie = turnIntoHash(request_contents[0])
-          res.cookie('value', hashed_cookie, {
+          res.cookie('hairdresser_value', hashed_cookie, {
             httpOnly: true,
             maxAge: 864000000
           })
@@ -483,7 +474,7 @@ app.post('/hairdresser-signup', uploadDir.single('image_upload'), (req, res) => 
       if (err) { console.log('err: ' + err); }
     });
 
-    res.cookie('value', hashed_email, {
+    res.cookie('hairdresser_value', hashed_email, {
       httpOnly: true,
       maxAge: 864000000
     })
@@ -493,7 +484,7 @@ app.post('/hairdresser-signup', uploadDir.single('image_upload'), (req, res) => 
 })
 
 app.post('/imgupload', uploadDir.single('upFile'), (req, res) => {
-  connection.query('UPDATE hairdresser_info SET qualification=\'' + req.file.path + '\' WHERE hashed_email=\'' + req.cookies.value + '\';', function (err, rows, fields) {
+  connection.query('UPDATE hairdresser_info SET qualification=\'' + req.file.path + '\' WHERE hashed_email=\'' + req.cookies.hairdresser_value + '\';', function (err, rows, fields) {
     if (err) { console.log('err: ' + err)};
   });
 
@@ -501,7 +492,7 @@ app.post('/imgupload', uploadDir.single('upFile'), (req, res) => {
 })
 
 app.post('/public-profile-imgupload', public_profile_img_uploadDir.single('public-profile-imgupload-upFile'), (req, res) => {
-  connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.value + '\';', function (err, rows, fields) {
+  connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.hairdresser_value + '\';', function (err, rows, fields) {
     if (err) { console.log('err: ' + err)};
     let dresser_id =rows[0].id
 
@@ -542,7 +533,7 @@ app.post('/basic-info', (req, res) => {
       request_contents.push(request_content)
     })
 
-    connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.value + '\';', function (err, rows, fields) {
+    connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.hairdresser_value + '\';', function (err, rows, fields) {
       if (err) { console.log('err: ' + err)};
       let dresser_id =rows[0].id
 
@@ -588,7 +579,7 @@ app.post('/cut-form',(req, res) => {
       request_contents.push(request_content)
     })
 
-    connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.value + '\';', function (err, rows, fields) {
+    connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.hairdresser_value + '\';', function (err, rows, fields) {
       if (err) { console.log('err: ' + err)};
       let dresser_id =rows[0].id
 
@@ -633,7 +624,7 @@ app.post('/introduction-form',(req, res) => {
       request_contents.push(request_content)
     })
 
-    connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.value + '\';', function (err, rows, fields) {
+    connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.hairdresser_value + '\';', function (err, rows, fields) {
       if (err) { console.log('err: ' + err)};
       let dresser_id =rows[0].id
 
