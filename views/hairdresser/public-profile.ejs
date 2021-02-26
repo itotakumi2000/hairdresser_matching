@@ -115,9 +115,24 @@
         </div>
         <button type="submit">更新</button>
       </form>
+      <form
+        action="/introduction-form"
+        method="POST"
+        id="introduction-form"
+        novalidate
+      >
+        <select id="select-pref"
+          ><option value="">都道府県を選択してください</option></select
+        >
+        <select id="select-city"
+          ><option value="">市区町村を選択してください</option></select
+        >
+        <button type="submit">更新</button>
+      </form>
     </div>
     <%- include ('../common/footer') %>
     <script src="js/materialize.js"></script>
     <script src="js/public-profile-validation.js"></script>
+    <script src="js/public-profile-pref.js"></script>
   </body>
 </html>
