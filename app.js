@@ -57,6 +57,10 @@ app.get('/password-reset', (req, res) => {
   res.render('./user/password-reset.ejs', {error_msg:"", correct_msg:""})
 })
 
+app.get('/pref-city', (req, res) => {
+  res.json(require('./public/js/pref_city'))
+})
+
 app.get('/password-reset-form/:email', (req, res) => {
   let hashed_email = decodeURIComponent(req.params.email.replace(/\+/g, "%20"));
 
