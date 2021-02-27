@@ -173,4 +173,37 @@ $button-color: rgb(34, 90, 243);
       margin: 25px 0;
     }
   }
+
+  #pref-and-money {
+    .component {
+      display: flex;
+
+      p {
+        margin-bottom: 40px;
+      }
+
+      .error_required {
+        color: red;
+      }
+    }
+
+    select {
+      width: 400px;
+    }
+
+    input {
+      display: inline-block;
+      margin-top: 30px;
+      width: 80px;
+      height: 40px;
+    }
+
+    button {
+      width: 80px;
+      height: 40px;
+      background-color: $button-color;
+      color: white;
+      margin: 25px 0;
+    }
+  }
 }

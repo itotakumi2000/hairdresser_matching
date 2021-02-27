@@ -1,5 +1,9 @@
 $(function(){
 
+  //----------------------------
+  //         基本情報
+  //----------------------------
+
   //必須項目チェック
   $(".required").blur(function(){
     if($(this).val() == ""){
@@ -44,8 +48,46 @@ $(function(){
     }
   });
 
+  //----------------------------
+  //     場所と金額の対応表
+  //----------------------------
+
+  $('#select-pref').blur(function () {
+    let selected = $('#select-pref option:selected');
+    if (!selected.val()) {
+      $(this).siblings('div.component').children('span.error_required').text("※入力必須項目です");
+      $(this).addClass("errored");
+    } else {
+      $(this).siblings('div.component').children('span.error_required').text("");
+      $(this).removeClass("errored");
+    }
+  });
+
+  $('#select-city').blur(function () {
+    let selected = $('#select-city option:selected');
+    if (!selected.val()) {
+      $(this).siblings('div.component').children('span.error_required').text("※入力必須項目です");
+      $(this).addClass("errored");
+    } else {
+      $(this).siblings('div.component').children('span.error_required').text("");
+      $(this).removeClass("errored");
+    }
+  });
+
   //送信時の必須項目入力チェック
   $("#submit-input").on('click',function(){
+    $(".required").each(function(){
+      if($(this).val() == ""){
+        $(this).siblings('div.component').children('span.error_required').text("※入力必須項目です");
+        $(this).addClass("errored");
+      }
+    });
+    if($(".errored").length){
+      return false;
+    }
+  });
+
+  $("#submit-pref-and-money").on('click',function(){
     $(".required").each(function(){
       if($(this).val() == ""){
         $(this).siblings('div.component').children('span.error_required').text("※入力必須項目です");

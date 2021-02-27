@@ -6,6 +6,7 @@ const bcrypt = require('bcrypt');
 const nodemailer = require("nodemailer");
 const multer = require('multer');
 const path = require('path');
+const city_json = require('./public/js/pref_city');
 
 require('dotenv').config();
 
@@ -646,6 +647,49 @@ app.post('/introduction-form',(req, res) => {
             });
           }
           res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace: rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: request_contents[0]})
+        });
+      }else {
+        console.log("cookie情報がありません")
+      }
+    });
+
+  })
+})
+
+app.post('/pref-and-money',(req, res) => {
+  let data = '';
+
+  req.on('data', function(chunk) {data += chunk})
+  .on('end', function() {
+
+    data = decodeURIComponent(data.replace(/\+/g, "%20"));
+    data = data.split('&');
+
+    let request_contents = [];
+
+    data.forEach((value) => {
+      let search_equal = value.indexOf("=")
+      let request_content = value.substr(search_equal + 1)
+      request_contents.push(request_content)
+    })
+
+    let json = JSON.parse(JSON.stringify(city_json))
+    let selected_city = json[Number(request_contents[0])-1][request_contents[0]].city
+    let selected_pref_name = json[Number(request_contents[0])-1][request_contents[0]].pref
+    let selected_city_name;
+    for(i = 0; i < selected_city.length; i++){
+      if(selected_city[i].id === request_contents[1]){
+        selected_city_name = selected_city[i].name
+      }
+    }
+
+    connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.hairdresser_value + '\';', function (err, rows, fields) {
+      if (err) { console.log('err: ' + err)};
+      let dresser_id =rows[0].id
+
+      if(rows.length !== 0){
+        connection.query('insert into public_profile_place(dresser_id, pref, city, money) values (\'' + dresser_id + '\', \'' + selected_pref_name + '\', \'' + selected_city_name + '\', \'' + request_contents[2] + '\');', function (err, rows, fields) {
+          if (err) { console.log('err: ' + err)};
         });
       }else {
         console.log("cookie情報がありません")

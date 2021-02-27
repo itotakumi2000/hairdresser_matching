@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <link rel="stylesheet" href="css/normalize.css" />
     <link
-      rel="stylesheet"
-      href="css/hairdresser-public-profile/hairdresser-public-profile.css"
-    />
-    <link
       href="css/materialize.css"
       type="text/css"
       rel="stylesheet"
       media="screen,projection"
+    />
+    <link
+      rel="stylesheet"
+      href="css/hairdresser-public-profile/hairdresser-public-profile.css"
     />
     <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -109,30 +109,42 @@
             class="introduction required"
             id="introduction"
           >
-<%= introduction %></textarea
+      <%= introduction %></textarea
           >
           <span class="error_introduction span-red"></span>
         </div>
         <button type="submit">更新</button>
       </form>
       <form
-        action="/introduction-form"
+        action="/pref-and-money"
         method="POST"
-        id="introduction-form"
+        id="pref-and-money"
         novalidate
       >
-        <select id="select-pref"
+        <div class="component">
+          <p>場所と金額の対応表</p>
+          <span class="error_required"></span>
+        </div>
+        <select id="select-pref" name="select-pref" class="required"
           ><option value="">都道府県を選択してください</option></select
-        >
-        <select id="select-city"
+        ><br></br>
+        <select id="select-city" name="select-city" class="required"
           ><option value="">市区町村を選択してください</option></select
-        >
-        <button type="submit">更新</button>
+        ><br></br>
+        <input
+          type="number"
+          name="amount_of_money"
+          class="amount_of_money required"
+          id="amount_of_money"
+          pattern="\d*"
+        />
+        <span>円</span><br></br>
+        <button type="submit" id="submit-pref-and-money">更新</button>
       </form>
     </div>
     <%- include ('../common/footer') %>
     <script src="js/materialize.js"></script>
-    <script src="js/public-profile-validation.js"></script>
     <script src="js/public-profile-pref.js"></script>
+    <script src="js/public-profile-validation.js"></script>
   </body>
 </html>

@@ -170,4 +170,37 @@
   color: white;
   margin: 25px 0;
 }
+
+.public-profile #pref-and-money .component {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.public-profile #pref-and-money .component p {
+  margin-bottom: 40px;
+}
+
+.public-profile #pref-and-money .component .error_required {
+  color: red;
+}
+
+.public-profile #pref-and-money select {
+  width: 400px;
+}
+
+.public-profile #pref-and-money input {
+  display: inline-block;
+  margin-top: 30px;
+  width: 80px;
+  height: 40px;
+}
+
+.public-profile #pref-and-money button {
+  width: 80px;
+  height: 40px;
+  background-color: #225af3;
+  color: white;
+  margin: 25px 0;
+}
 /*# sourceMappingURL=hairdresser-public-profile.css.map */
