@@ -22,6 +22,10 @@ $button-color: rgb(34, 90, 243);
     color: red;
   }
 
+  // ------------------------
+  //      画像アップロード
+  // ------------------------
+
   .imgupload-component {
     margin-bottom: 20px;
 
@@ -43,6 +47,10 @@ $button-color: rgb(34, 90, 243);
       }
     }
   }
+
+  // ------------------------
+  //         基本情報
+  // ------------------------
 
   #basic-info {
     .name-component {
@@ -118,6 +126,10 @@ $button-color: rgb(34, 90, 243);
     }
   }
 
+  // ------------------------
+  //       得意なカット
+  // ------------------------
+
   #cut-form {
     .cut-component {
       .component {
@@ -145,6 +157,10 @@ $button-color: rgb(34, 90, 243);
       margin: 25px 0;
     }
   }
+
+  // ------------------------
+  //        自己紹介
+  // ------------------------
 
   #introduction-form {
     .introduction-component {
@@ -174,6 +190,10 @@ $button-color: rgb(34, 90, 243);
     }
   }
 
+  // ------------------------
+  //     場所と金額の対応表
+  // ------------------------
+
   #pref-and-money {
     .component {
       display: flex;
@@ -187,6 +207,26 @@ $button-color: rgb(34, 90, 243);
       }
     }
 
+    table {
+      border-collapse: collapse;
+      margin: 0 auto;
+      margin-bottom: 30px;
+    }
+    td,
+    th {
+      padding: 10px;
+    }
+    th {
+      color: #fff;
+      background: #005ab3;
+    }
+    table tr:nth-child(odd) {
+      background: #e6f2ff;
+    }
+    td {
+      border-bottom: 2px solid #80bcff;
+    }
+
     select {
       width: 400px;
     }
@@ -196,6 +236,104 @@ $button-color: rgb(34, 90, 243);
       margin-top: 30px;
       width: 80px;
       height: 40px;
+    }
+
+    button {
+      width: 80px;
+      height: 40px;
+      background-color: $button-color;
+      color: white;
+      margin: 25px 0;
+    }
+  }
+
+  // ------------------------
+  //       スケジュール
+  // ------------------------
+
+  #schedule {
+    .schedule-component {
+      .component {
+        display: flex;
+
+        p {
+          margin-bottom: 25px;
+        }
+
+        span {
+          color: red;
+        }
+      }
+
+      table {
+        border-collapse: collapse;
+        margin: 0 auto;
+        margin-bottom: 30px;
+      }
+      td,
+      th {
+        padding: 10px;
+      }
+      th {
+        color: #fff;
+        background: #005ab3;
+      }
+      table tr:nth-child(odd) {
+        background: #e6f2ff;
+      }
+      td {
+        border-bottom: 2px solid #80bcff;
+      }
+
+      .select-date {
+        margin-bottom: 20px;
+
+        #select-year {
+          width: 70px;
+        }
+
+        #select-month {
+          width: 70px;
+        }
+
+        #select-day {
+          width: 70px;
+        }
+      }
+
+      #select-prev-hour {
+        width: 70px;
+      }
+
+      #select-prev-min {
+        width: 70px;
+      }
+
+      #select-next-hour {
+        width: 70px;
+      }
+
+      #select-next-min {
+        width: 70px;
+      }
+
+      span {
+        margin: 0 10px;
+      }
+    }
+
+    .select-time {
+      display: flex;
+
+      .select-prev-time {
+      }
+
+      span {
+        line-height: 40px;
+      }
+
+      .select-next-time {
+      }
     }
 
     button {

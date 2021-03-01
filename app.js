@@ -127,11 +127,21 @@ app.get('/hairdresser-public-profile', (req, res) => {
     if(rows.length !== 0){
       connection.query('SELECT * FROM public_profile WHERE dresser_id=\'' + dresser_id + '\';', function (err, rows, fields) {
         if (err) { console.log('err: ' + err)};
+        let public_profile_rows = rows;
 
-        if(rows.length !== 0){
-          res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace:rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: rows[0].introduction})
+        if(public_profile_rows.length !== 0){
+          connection.query('SELECT public_profile.id, nickname, workplace, business_experience, cut, introduction, pref, city, money, datetime_before, datetime_after FROM public_profile LEFT OUTER JOIN public_profile_place ON public_profile.dresser_id = public_profile_place.dresser_id RIGHT OUTER JOIN public_profile_schedule ON public_profile.dresser_id =public_profile_schedule.dresser_id WHERE public_profile.dresser_id = \'' + dresser_id + '\';', function (err, rows, fields) {
+            if (err) { console.log('err: ' + err)};
+
+            if(rows.length !== 0){
+              res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace: rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: rows[0].introduction, pref_and_money_rows: rows, datetime: rows})
+            }else {
+              res.render('./hairdresser/public-profile.ejs', {nickname: public_profile_rows[0].nickname, workplace: public_profile_rows[0].workplace, business_experience: public_profile_rows[0].business_experience, cut: public_profile_rows[0].cut, introduction: public_profile_rows[0].introduction, pref_and_money_rows: public_profile_rows, datetime: ""})
+            }
+
+          });
         } else {
-          res.render('./hairdresser/public-profile.ejs', {nickname: "", workplace:"", business_experience: "", cut: "", introduction: ""})
+          res.render('./hairdresser/public-profile.ejs', {nickname: "", workplace:"", business_experience: "", cut: "", introduction: "", pref_and_money_rows : "", datetime: ""})
         }
 
       });
@@ -556,7 +566,11 @@ app.post('/basic-info', (req, res) => {
             });
           }
 
-          res.render('./hairdresser/public-profile.ejs', {nickname: request_contents[0], workplace: request_contents[1], business_experience: request_contents[2], cut: rows[0].cut, introduction: rows[0].introduction})
+          connection.query('SELECT public_profile.id, nickname, workplace, business_experience, cut, introduction, pref, city, money, datetime_before, datetime_after FROM public_profile LEFT OUTER JOIN public_profile_place ON public_profile.dresser_id = public_profile_place.dresser_id RIGHT OUTER JOIN public_profile_schedule ON public_profile.dresser_id =public_profile_schedule.dresser_id WHERE public_profile.dresser_id = \'' + dresser_id + '\';', function (err, rows, fields) {
+            if (err) { console.log('err: ' + err)};
+
+            res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace: rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: rows[0].introduction, pref_and_money_rows: rows, datetime: ""})
+          });
 
         });
       }else {
@@ -602,7 +616,11 @@ app.post('/cut-form',(req, res) => {
             });
           }
 
-          res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace: rows[0].workplace, business_experience: rows[0].business_experience, cut: request_contents[0], introduction: rows[0].introduction})
+          connection.query('SELECT public_profile.id, nickname, workplace, business_experience, cut, introduction, pref, city, money, datetime_before, datetime_after FROM public_profile LEFT OUTER JOIN public_profile_place ON public_profile.dresser_id = public_profile_place.dresser_id RIGHT OUTER JOIN public_profile_schedule ON public_profile.dresser_id =public_profile_schedule.dresser_id WHERE public_profile.dresser_id = \'' + dresser_id + '\';', function (err, rows, fields) {
+            if (err) { console.log('err: ' + err)};
+
+            res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace: rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: rows[0].introduction, pref_and_money_rows: rows, datetime: rows})
+          });
         });
       }else {
         console.log("cookie情報がありません")
@@ -646,7 +664,11 @@ app.post('/introduction-form',(req, res) => {
               if (err) { console.log('err: ' + err)};
             });
           }
-          res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace: rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: request_contents[0]})
+          connection.query('SELECT public_profile.id, nickname, workplace, business_experience, cut, introduction, pref, city, money, datetime_before, datetime_after FROM public_profile LEFT OUTER JOIN public_profile_place ON public_profile.dresser_id = public_profile_place.dresser_id RIGHT OUTER JOIN public_profile_schedule ON public_profile.dresser_id =public_profile_schedule.dresser_id WHERE public_profile.dresser_id = \'' + dresser_id + '\';', function (err, rows, fields) {
+            if (err) { console.log('err: ' + err)};
+
+            res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace: rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: rows[0].introduction, pref_and_money_rows: rows, datetime: rows})
+          });
         });
       }else {
         console.log("cookie情報がありません")
@@ -690,6 +712,65 @@ app.post('/pref-and-money',(req, res) => {
       if(rows.length !== 0){
         connection.query('insert into public_profile_place(dresser_id, pref, city, money) values (\'' + dresser_id + '\', \'' + selected_pref_name + '\', \'' + selected_city_name + '\', \'' + request_contents[2] + '\');', function (err, rows, fields) {
           if (err) { console.log('err: ' + err)};
+        });
+        connection.query('SELECT public_profile.id, nickname, workplace, business_experience, cut, introduction, pref, city, money, datetime_before, datetime_after FROM public_profile LEFT OUTER JOIN public_profile_place ON public_profile.dresser_id = public_profile_place.dresser_id RIGHT OUTER JOIN public_profile_schedule ON public_profile.dresser_id =public_profile_schedule.dresser_id WHERE public_profile.dresser_id = \'' + dresser_id + '\';', function (err, rows, fields) {
+          if (err) { console.log('err: ' + err)};
+
+          if(rows.length !== 0){
+            res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace: rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: rows[0].introduction, pref_and_money_rows: rows, datetime: rows})
+          }else {
+            connection.query('SELECT * FROM public_profile LEFT OUTER JOIN public_profile_place ON public_profile.dresser_id = public_profile_place.dresser_id WHERE public_profile.dresser_id = \'' + dresser_id + '\';', function (err, rows, fields) {
+              if (err) { console.log('err: ' + err)};
+
+              res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace: rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: rows[0].introduction, pref_and_money_rows: rows, datetime: ""})
+            });
+          }
+        });
+      }else {
+        console.log("cookie情報がありません")
+      }
+    });
+
+  })
+})
+
+app.post('/schedule',(req, res) => {
+  let data = '';
+
+  req.on('data', function(chunk) {data += chunk})
+  .on('end', function() {
+
+    data = decodeURIComponent(data.replace(/\+/g, "%20"));
+    data = data.split('&');
+
+    let request_contents = [];
+
+    data.forEach((value) => {
+      let search_equal = value.indexOf("=")
+      let request_content = value.substr(search_equal + 1)
+      request_contents.push(request_content)
+    })
+
+    for(i=1; i<request_contents.length;i++){
+      request_contents[i] = ("00" + request_contents[i]).slice(-2)
+    }
+
+    let prev_date = request_contents[0] + request_contents[1] + request_contents[2] + request_contents[3] + request_contents[4] + "00";
+    let next_date = request_contents[0] + request_contents[1] + request_contents[2] + request_contents[5] + request_contents[6] + "00";
+
+    connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.hairdresser_value + '\';', function (err, rows, fields) {
+      if (err) { console.log('err: ' + err)};
+      let dresser_id =rows[0].id
+
+      if(rows.length !== 0){
+        connection.query('insert into public_profile_schedule(dresser_id, datetime_before, datetime_after) values (\'' + dresser_id + '\', \'' + prev_date + '\', \'' + next_date + '\');', function (err, rows, fields) {
+          if (err) { console.log('err: ' + err)};
+
+        });
+        connection.query('SELECT public_profile.id, nickname, workplace, business_experience, cut, introduction, pref, city, money, datetime_before, datetime_after FROM public_profile LEFT OUTER JOIN public_profile_place ON public_profile.dresser_id = public_profile_place.dresser_id RIGHT OUTER JOIN public_profile_schedule ON public_profile.dresser_id =public_profile_schedule.dresser_id WHERE public_profile.dresser_id = \'' + dresser_id + '\';', function (err, rows, fields) {
+          if (err) { console.log('err: ' + err)};
+
+          res.render('./hairdresser/public-profile.ejs', {nickname: rows[0].nickname, workplace: rows[0].workplace, business_experience: rows[0].business_experience, cut: rows[0].cut, introduction: rows[0].introduction, pref_and_money_rows: rows, datetime: rows})
         });
       }else {
         console.log("cookie情報がありません")
