@@ -194,7 +194,7 @@ $button-color: rgb(34, 90, 243);
   //     場所と金額の対応表
   // ------------------------
 
-  #pref-and-money {
+  .pref-and-money {
     .component {
       display: flex;
 
@@ -225,6 +225,14 @@ $button-color: rgb(34, 90, 243);
     }
     td {
       border-bottom: 2px solid #80bcff;
+
+      form {
+        input {
+          margin: 0;
+          background-color: $button-color;
+          color: white;
+        }
+      }
     }
 
     select {
@@ -251,7 +259,7 @@ $button-color: rgb(34, 90, 243);
   //       スケジュール
   // ------------------------
 
-  #schedule {
+  .schedule {
     .schedule-component {
       .component {
         display: flex;
@@ -283,6 +291,16 @@ $button-color: rgb(34, 90, 243);
       }
       td {
         border-bottom: 2px solid #80bcff;
+
+        form {
+          input {
+            margin: 0;
+            background-color: $button-color;
+            color: white;
+            width: 80px;
+            height: 40px;
+          }
+        }
       }
 
       .select-date {

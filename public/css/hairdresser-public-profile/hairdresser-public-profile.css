@@ -171,56 +171,62 @@
   margin: 25px 0;
 }
 
-.public-profile #pref-and-money .component {
+.public-profile .pref-and-money .component {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.public-profile #pref-and-money .component p {
+.public-profile .pref-and-money .component p {
   margin-bottom: 40px;
 }
 
-.public-profile #pref-and-money .component .error_required {
+.public-profile .pref-and-money .component .error_required {
   color: red;
 }
 
-.public-profile #pref-and-money table {
+.public-profile .pref-and-money table {
   border-collapse: collapse;
   margin: 0 auto;
   margin-bottom: 30px;
 }
 
-.public-profile #pref-and-money td,
-.public-profile #pref-and-money th {
+.public-profile .pref-and-money td,
+.public-profile .pref-and-money th {
   padding: 10px;
 }
 
-.public-profile #pref-and-money th {
+.public-profile .pref-and-money th {
   color: #fff;
   background: #005ab3;
 }
 
-.public-profile #pref-and-money table tr:nth-child(odd) {
+.public-profile .pref-and-money table tr:nth-child(odd) {
   background: #e6f2ff;
 }
 
-.public-profile #pref-and-money td {
+.public-profile .pref-and-money td {
   border-bottom: 2px solid #80bcff;
 }
 
-.public-profile #pref-and-money select {
+.public-profile .pref-and-money td form input {
+  margin: 0;
+  background-color: #225af3;
+  color: white;
+}
+
+.public-profile .pref-and-money select {
   width: 400px;
 }
 
-.public-profile #pref-and-money input {
+.public-profile .pref-and-money input {
   display: inline-block;
   margin-top: 30px;
   width: 80px;
   height: 40px;
 }
 
-.public-profile #pref-and-money button {
+.public-profile .pref-and-money button {
   width: 80px;
   height: 40px;
   background-color: #225af3;
@@ -228,91 +234,99 @@
   margin: 25px 0;
 }
 
-.public-profile #schedule .schedule-component .component {
+.public-profile .schedule .schedule-component .component {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.public-profile #schedule .schedule-component .component p {
+.public-profile .schedule .schedule-component .component p {
   margin-bottom: 25px;
 }
 
-.public-profile #schedule .schedule-component .component span {
+.public-profile .schedule .schedule-component .component span {
   color: red;
 }
 
-.public-profile #schedule .schedule-component table {
+.public-profile .schedule .schedule-component table {
   border-collapse: collapse;
   margin: 0 auto;
   margin-bottom: 30px;
 }
 
-.public-profile #schedule .schedule-component td,
-.public-profile #schedule .schedule-component th {
+.public-profile .schedule .schedule-component td,
+.public-profile .schedule .schedule-component th {
   padding: 10px;
 }
 
-.public-profile #schedule .schedule-component th {
+.public-profile .schedule .schedule-component th {
   color: #fff;
   background: #005ab3;
 }
 
-.public-profile #schedule .schedule-component table tr:nth-child(odd) {
+.public-profile .schedule .schedule-component table tr:nth-child(odd) {
   background: #e6f2ff;
 }
 
-.public-profile #schedule .schedule-component td {
+.public-profile .schedule .schedule-component td {
   border-bottom: 2px solid #80bcff;
 }
 
-.public-profile #schedule .schedule-component .select-date {
+.public-profile .schedule .schedule-component td form input {
+  margin: 0;
+  background-color: #225af3;
+  color: white;
+  width: 80px;
+  height: 40px;
+}
+
+.public-profile .schedule .schedule-component .select-date {
   margin-bottom: 20px;
 }
 
-.public-profile #schedule .schedule-component .select-date #select-year {
+.public-profile .schedule .schedule-component .select-date #select-year {
   width: 70px;
 }
 
-.public-profile #schedule .schedule-component .select-date #select-month {
+.public-profile .schedule .schedule-component .select-date #select-month {
   width: 70px;
 }
 
-.public-profile #schedule .schedule-component .select-date #select-day {
+.public-profile .schedule .schedule-component .select-date #select-day {
   width: 70px;
 }
 
-.public-profile #schedule .schedule-component #select-prev-hour {
+.public-profile .schedule .schedule-component #select-prev-hour {
   width: 70px;
 }
 
-.public-profile #schedule .schedule-component #select-prev-min {
+.public-profile .schedule .schedule-component #select-prev-min {
   width: 70px;
 }
 
-.public-profile #schedule .schedule-component #select-next-hour {
+.public-profile .schedule .schedule-component #select-next-hour {
   width: 70px;
 }
 
-.public-profile #schedule .schedule-component #select-next-min {
+.public-profile .schedule .schedule-component #select-next-min {
   width: 70px;
 }
 
-.public-profile #schedule .schedule-component span {
+.public-profile .schedule .schedule-component span {
   margin: 0 10px;
 }
 
-.public-profile #schedule .select-time {
+.public-profile .schedule .select-time {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
 }
 
-.public-profile #schedule .select-time span {
+.public-profile .schedule .select-time span {
   line-height: 40px;
 }
 
-.public-profile #schedule button {
+.public-profile .schedule button {
   width: 80px;
   height: 40px;
   background-color: #225af3;
