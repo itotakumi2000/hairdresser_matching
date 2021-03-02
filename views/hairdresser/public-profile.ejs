@@ -44,7 +44,7 @@
           <input
             type="text"
             name="name"
-            class="name required"
+            class="name basic-required"
             id="name"
             value="<%= nickname %>"
           />
@@ -72,7 +72,7 @@
           <input
             type="number"
             name="business-experience"
-            class="business-experience required"
+            class="business-experience basic-required"
             id="business-experience"
             pattern="\d*"
             value="<%= business_experience %>"
@@ -80,7 +80,7 @@
           <span>年</span>
           <span class="error_business_experience span-red"></span>
         </div>
-        <button type="submit">更新</button>
+        <button type="submit" id="basic-submit">更新</button>
       </form>
       <form action="/cut-form" method="POST" id="cut-form" novalidate>
         <div class="cut-component">
@@ -137,16 +137,14 @@
         id="pref-and-money"
         novalidate
         >
-          <select id="select-pref" name="select-pref" class="required"
-            ><option value="">都道府県を選択してください</option></select
+          <select id="select-pref" name="select-pref"><option value="">都道府県を選択してください</option></select
           ><br></br>
-          <select id="select-city" name="select-city" class="required"
-            ><option value="">市区町村を選択してください</option></select
+          <select id="select-city" name="select-city"><option value="">市区町村を選択してください</option></select
           ><br></br>
           <input
             type="number"
             name="amount_of_money"
-            class="amount_of_money required"
+            class="amount_of_money pref-and-money-required"
             id="amount_of_money"
             pattern="\d*"
           />
@@ -184,24 +182,24 @@
             novalidate
           >
             <div class="select-date">
-              <select id="select-year" name="select-year" class="required">
+              <select id="select-year" name="select-year" class="schedule-required">
               </select><span>/</span>
-              <select id="select-month" name="select-month" class="required"
+              <select id="select-month" name="select-month" class="schedule-required"
                 ></select
               ><span>/</span>
-              <select id="select-day" name="select-day" class="required"
+              <select id="select-day" name="select-day" class="schedule-required"
                 ></select
               >
             </div>
             <div class="select-time">
               <div class="select-prev-time">
-                <select id="select-prev-hour" name="select-prev-hour" class="required">
+                <select id="select-prev-hour" name="select-prev-hour" class="schedule-required">
                   <% for(i=0;i<24;i++){ %>
                     <option value="<%= i %>"><%= ("0" + i).slice(-2) %></option>
                   <% } %>
                 </select>
                 <span>：</span>
-                <select id="select-prev-min" name="select-prev-min" class="required">
+                <select id="select-prev-min" name="select-prev-min" class="schedule-required">
                   <option value="00">00</option>
                   <option value="15">15</option>
                   <option value="30">30</option>
@@ -210,13 +208,13 @@
               </div>
               <span>〜</span>
               <div class="select-next-time">
-                <select id="select-next-hour" name="select-next-hour" class="required">
+                <select id="select-next-hour" name="select-next-hour" class="schedule-required">
                   <% for(i=0;i<24;i++){ %>
                     <option value="<%= i %>"><%= ("0" + i).slice(-2) %></option>
                   <% } %>
                 </select>
                 <span>：</span>
-                <select id="select-next-min" name="select-next-min" class="required">
+                <select id="select-next-min" name="select-next-min" class="schedule-required">
                     <option value="00">00</option>
                     <option value="15">15</option>
                     <option value="30">30</option>
@@ -226,7 +224,7 @@
               </div>
             </div>
           </div>
-          <button type="submit">追加</button>
+          <button type="submit" id="submit-schedule">追加</button>
         </form>
       </div>
     </div>

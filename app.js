@@ -1103,7 +1103,7 @@ app.post('/delete-schedule',(req, res) => {
           if (err) { console.log('err: ' + err)};
           public_profile_place_rows = place_rows;
         });
-        connection.query('SELECT * FROM public_profile_schedule WHERE dresser_id = \'' + dresser_id + '\'1;', function (err, rows, fields) {
+        connection.query('SELECT * FROM public_profile_schedule WHERE dresser_id = \'' + dresser_id + '\';', function (err, rows, fields) {
           if (err) { console.log('err: ' + err)};
           public_profile_schedule_rows = rows;
 
