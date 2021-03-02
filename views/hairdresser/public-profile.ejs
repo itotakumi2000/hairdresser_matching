@@ -121,12 +121,14 @@
         <table>
           <tr><th>都道府県</th><th>市区町村</th><th>金額</th><th>削除</th></tr>
           <% for (let i = 0; i < pref_and_money_rows.length; i++) { %>
-            <tr>
-              <td><%- pref_and_money_rows[i].pref %></td>
-              <td><%- pref_and_money_rows[i].city %></td>
-              <td>￥<%- pref_and_money_rows[i].money %></td>
-              <td><form method="POST" action="/delete-pref-and-money"><input type="submit" value="削除" /><input type="hidden" name="id" value="<%- pref_and_money_rows[i].id %>" /></form></td>
-            </tr>
+            <% if(pref_and_money_rows[i].pref){ %>
+              <tr>
+                <td><%- pref_and_money_rows[i].pref %></td>
+                <td><%- pref_and_money_rows[i].city %></td>
+                <td>￥<%- pref_and_money_rows[i].money %></td>
+                <td><form method="POST" action="/delete-pref-and-money"><input type="submit" value="削除" /><input type="hidden" name="id" value="<%- pref_and_money_rows[i].id %>" /></form></td>
+              </tr>
+            <% } %>
           <% } %>
         </table>
         <form

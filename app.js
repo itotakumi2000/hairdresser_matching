@@ -870,6 +870,7 @@ app.post('/delete-schedule',(req, res) => {
     connection.query('SELECT * FROM hairdresser_info WHERE hashed_email=\'' + req.cookies.hairdresser_value + '\';', function (err, rows, fields) {
       if (err) { console.log('err: ' + err)};
       let dresser_id =rows[0].id
+      let public_profile_rows;
       let public_profile_place_rows;
       let public_profile_schedule_rows;
 
